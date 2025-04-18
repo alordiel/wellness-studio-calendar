@@ -1,0 +1,26 @@
+{
+  "name": "wellness-studio-calendar",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/admin",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev -w packages/admin",
+    "dev:frontend": "npm run dev -w packages/frontend",
+    "build:admin": "npm run build -w packages/admin",
+    "build:frontend": "npm run build -w packages/frontend",
+    "build": "npm run build:admin && npm run build:frontend"
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.12",
+    "vite": "^6.3.2"
+  }
+}
