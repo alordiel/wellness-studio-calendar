@@ -33,12 +33,13 @@ register_deactivation_hook(__FILE__, 'wsc_deactivate_plugin');
  * Actions to perform on plugin activation
  */
 function wsc_activate_plugin() {
-    // Create database tables
-    require_once WSC_PLUGIN_DIR . 'includes/database.php';
-    wsc_create_database_tables();
 
-    // Create the calendar page
+    require_once WSC_PLUGIN_DIR . 'includes/database.php';
+	require_once WSC_PLUGIN_DIR . 'includes/admin/roles.php';
+
+    wsc_create_database_tables();
     wsc_create_calendar_page();
+	wsc_register_roles_and_caps();
 
     // Flush rewrite rules after registering custom post types/templates
     flush_rewrite_rules();
