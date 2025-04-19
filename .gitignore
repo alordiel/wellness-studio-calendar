@@ -20,7 +20,7 @@ yarn-error.log
 yarn-debug.log
 
 # Build files
-assets/js/dist/
+packages/js/dist/
 
 # Composer
 vendor/
