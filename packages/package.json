@@ -3,14 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
-    "packages/admin",
-    "packages/frontend"
+    "./admin",
+    "./frontend"
   ],
   "scripts": {
-    "dev:admin": "npm run dev -w packages/admin",
-    "dev:frontend": "npm run dev -w packages/frontend",
-    "build:admin": "npm run build -w packages/admin",
-    "build:frontend": "npm run build -w packages/frontend",
+    "dev:admin": "npm run dev -w ./admin",
+    "dev:frontend": "npm run dev -w ./front-end",
+    "build:admin": "npm run build -w ./admin",
+    "build:frontend": "npm run build -w ./front-end",
     "build": "npm run build:admin && npm run build:frontend"
   },
   "dependencies": {

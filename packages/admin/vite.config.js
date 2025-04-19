@@ -12,7 +12,7 @@ export default defineConfig({
     // Generate assets with hashes in filenames
     assetsDir: '',
     // Output to a directory that you'll enqueue in WordPress
-    outDir: 'dist',
+    outDir: '../../assets/admin',
     // This ensures we don't get a single massive JS file
     rollupOptions: {
       output: {
