@@ -35,6 +35,7 @@ function wsc_create_database_tables() {
     // Instructors table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_instructors` (
         `ID` int(4) AUTO_INCREMENT NOT NULL UNIQUE,
+        `name` varchar(255) NOT NULL,
         `description` varchar(800) NOT NULL,
         `photo` varchar(500) NOT NULL,
         `link` varchar(500) NOT NULL,
