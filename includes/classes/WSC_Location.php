@@ -46,6 +46,7 @@ class WSC_Location {
         // Ensure required fields are present
         $type = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : '';
         $name = isset( $data['name'] ) ? sanitize_text_field( $data['name'] ) : '';
+		$places = isset( $data['places'] ) ? absint( $data['places'] ) : 0;
 
         // Validate required fields
         if ( empty( $name ) || empty( $type ) ) {
@@ -60,15 +61,16 @@ class WSC_Location {
 
         // Prepare data for insertion
         $location_data = array(
-            'type' => $type,
-            'name' => $name,
+            'type'   => $type,
+            'name'   => $name,
+	        'places' => $places,
         );
 
         // Insert the location
         $result = $wpdb->insert(
             $this->table_name,
             $location_data,
-            array( '%s', '%s' )
+            array( '%s', '%s', '%' )
         );
 
         if ( $result ) {
@@ -118,6 +120,14 @@ class WSC_Location {
             if ( ! empty( $name ) ) {
                 $update_data['name'] = $name;
                 $formats[] = '%s';
+            }
+        }
+
+		if ( isset( $data['spaces'] ) ) {
+            $spaces = sanitize_text_field( $data['spaces'] );
+            if ( ! empty( $spaces ) ) {
+                $update_data['spaces'] = $spaces;
+                $formats[] = '%d';
             }
         }
 

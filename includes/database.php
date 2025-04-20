@@ -23,12 +23,11 @@ function wsc_create_database_tables() {
     $sql = array();
 
     // Practice class table
-    $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_practice_class` (
+    $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_activity` (
         `ID` int(4) AUTO_INCREMENT NOT NULL UNIQUE,
         `name` varchar(255) NOT NULL,
         `description` varchar(500) NOT NULL,
         `link` varchar(500) NOT NULL,
-        `spaces` TINYINT(1) NOT NULL,
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 
@@ -47,13 +46,14 @@ function wsc_create_database_tables() {
         `ID` int(2) AUTO_INCREMENT NOT NULL UNIQUE,
         `type` varchar(255) NOT NULL,
         `name` varchar(255) NOT NULL,
+        `max_participants` TINYINT(1) NOT NULL,
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 
     // Events table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_events` (
         `ID` int(8) AUTO_INCREMENT NOT NULL UNIQUE,
-        `practice_class` int(4) NOT NULL,
+        `activity` int(4) NOT NULL,
         `instructor` int(4) NOT NULL,
         `location` int(2) NOT NULL,
         `room` int(2) NOT NULL,
@@ -61,6 +61,7 @@ function wsc_create_database_tables() {
         `week_day` varchar(20) NOT NULL,
         `start_time` time NOT NULL,
         `end_time` time NOT NULL,
+        `places` TINYINT(1) NOT NULL,
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 
@@ -90,8 +91,8 @@ function wsc_create_database_tables() {
 
     // Add foreign key constraints
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk1` FOREIGN KEY (`practice_class`) 
-        REFERENCES `{$wpdb->prefix}wsc_practice_class`(`ID`);";
+        ADD CONSTRAINT `event_fk1` FOREIGN KEY (`activity`) 
+        REFERENCES `{$wpdb->prefix}wsc_activity`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
         ADD CONSTRAINT `event_fk2` FOREIGN KEY (`instructor`) 

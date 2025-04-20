@@ -79,7 +79,7 @@ class WSC_Event {
         $week_day = isset( $data['week_day'] ) ? sanitize_text_field( $data['week_day'] ) : '';
         $start_time = isset( $data['start_time'] ) ? sanitize_text_field( $data['start_time'] ) : '';
         $end_time = isset( $data['end_time'] ) ? sanitize_text_field( $data['end_time'] ) : '';
-
+		$places = isset( $data['places'] ) ? absint( $data['places'] ) : 0;
         // Validate required fields
         if ( !$practice_class || !$instructor || !$location || !$room || empty($week_day) || empty($start_time) || empty($end_time) ) {
 			throw new Exception(__('Missing some fields data', 'wellness-studio-calendar'));
@@ -106,13 +106,14 @@ class WSC_Event {
             'week_day'       => $week_day,
             'start_time'     => $start_time,
             'end_time'       => $end_time,
+	        'places'         => $places,
         );
 
         // Insert the event
         $result = $wpdb->insert(
             $this->table_name,
             $event_data,
-            array( '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s' )
+            array( '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%d' )
         );
 
         if ( $result ) {
@@ -141,7 +142,7 @@ class WSC_Event {
         }
 
         $query = $wpdb->prepare(
-            "SELECT event.name, event.start_time, event.end_time, event.week_day, 
+            "SELECT event.name, event.start_time, event.end_time, event.week_day, event.places,
                 practice.name AS practice_class_name, 
                 instructor.name AS instructor_name, 
                 location.name AS location_name,
@@ -232,6 +233,11 @@ class WSC_Event {
                 $update_data['end_time'] = $end_time;
                 $formats[] = '%s';
             }
+        }
+
+		 if ( isset( $data['places'] ) ) {
+            $update_data['places'] = absint( $data['places'] );
+            $formats[] = '%d';
         }
 
         // If no fields to update, return early
