@@ -73,8 +73,11 @@ function wsc_create_database_tables() {
         `email` varchar(255) NOT NULL,
         `phone` varchar(255) NOT NULL,
         `payment` varchar(255) NOT NULL,
+        `cancelation_hash` varchar(255) NOT NULL,
+        `cancel_before` tinyint(1) NOT NULL,
         `user_notes` varchar(500) NOT NULL,
         `admin_notes` varchar(500) NOT NULL,
+        
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 
