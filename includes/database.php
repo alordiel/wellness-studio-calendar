@@ -44,8 +44,8 @@ function wsc_create_database_tables() {
     // Locations table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_locations` (
         `ID` int(2) AUTO_INCREMENT NOT NULL UNIQUE,
-        `type` varchar(255) NOT NULL,
-        `name` varchar(255) NOT NULL,
+        `address` varchar(255) NOT NULL,
+        `hall_name` varchar(255) NOT NULL,
         `max_participants` TINYINT(1) NOT NULL,
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
