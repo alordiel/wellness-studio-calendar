@@ -1,10 +1,6 @@
 <template>
   <div class="wp-vue-app bg-white p-6 rounded-lg shadow-md">
     <h1 class="text-2xl font-bold text-gray-800 mb-4">Activity tracker</h1>
-    <Dashboard></Dashboard>
+    <router-view></router-view>
   </div>
 </template>
-
-<script setup>
-  import Dashboard from "./views/Dashboard.vue";
-</script>
