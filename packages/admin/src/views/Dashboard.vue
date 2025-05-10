@@ -57,9 +57,9 @@ const dashboardBlocks: DashboardBlock[] = [
   },
   {
     name: 'activities',
-    title: 'Manage Activities',
+    title: 'Activities',
     route: '/activities',
-    ariaLabel: 'Navigate to Manage Activities page',
+    ariaLabel: 'Navigate to Activities page',
     borderColor: 'border-green-300',
     bgColor: 'bg-green-50',
     hoverColor: 'hover:bg-green-100',
@@ -67,23 +67,13 @@ const dashboardBlocks: DashboardBlock[] = [
   },
   {
     name: 'events',
-    title: 'Manage Events',
+    title: 'Events',
     route: '/events',
-    ariaLabel: 'Navigate to Manage Events page',
+    ariaLabel: 'Navigate to Events page',
     borderColor: 'border-purple-300',
     bgColor: 'bg-purple-50',
     hoverColor: 'hover:bg-purple-100',
     textColor: 'text-purple-800'
-  },
-  {
-    name: 'exceptions',
-    title: 'Event Exceptions',
-    route: '/exceptions',
-    ariaLabel: 'Navigate to Event Exceptions page',
-    borderColor: 'border-yellow-300',
-    bgColor: 'bg-yellow-50',
-    hoverColor: 'hover:bg-yellow-100',
-    textColor: 'text-yellow-800'
   },
   {
     name: 'instructors',
@@ -97,13 +87,23 @@ const dashboardBlocks: DashboardBlock[] = [
   },
   {
     name: 'locations',
-    title: 'Manage Locations',
+    title: 'Locations',
     route: '/locations',
-    ariaLabel: 'Navigate to Manage Locations page',
+    ariaLabel: 'Navigate to Locations page',
     borderColor: 'border-indigo-300',
     bgColor: 'bg-indigo-50',
     hoverColor: 'hover:bg-indigo-100',
     textColor: 'text-indigo-800'
+  },
+  {
+    name: 'settings',
+    title: 'Settings',
+    route: '/settings',
+    ariaLabel: 'Navigate toSettings page',
+    borderColor: 'border-yellow-300',
+    bgColor: 'bg-yellow-50',
+    hoverColor: 'hover:bg-yellow-100',
+    textColor: 'text-yellow-800'
   }
 ];
 </script>

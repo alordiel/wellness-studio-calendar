@@ -22,11 +22,6 @@ const routes = [
     component: () => import('../views/Events.vue')
   },
   {
-    path: '/exceptions',
-    name: 'Exceptions',
-    component: () => import('../views/Exceptions.vue')
-  },
-  {
     path: '/instructors',
     name: 'Instructors',
     component: () => import('../views/Instructors.vue')

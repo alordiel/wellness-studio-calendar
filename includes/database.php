@@ -35,8 +35,8 @@ function wsc_create_database_tables() {
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_instructors` (
         `ID` int(4) AUTO_INCREMENT NOT NULL UNIQUE,
         `name` varchar(255) NOT NULL,
-        `description` varchar(800) NOT NULL,
-        `photo` varchar(500) NOT NULL,
+        `biography` varchar(800) NOT NULL,
+        `avatar` varchar(500) NOT NULL,
         `link` varchar(500) NOT NULL,
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
@@ -56,7 +56,6 @@ function wsc_create_database_tables() {
         `activity` int(4) NOT NULL,
         `instructor` int(4) NOT NULL,
         `location` int(2) NOT NULL,
-        `room` int(2) NOT NULL,
         `color` varchar(10) NOT NULL,
         `week_day` varchar(20) NOT NULL,
         `start_time` time NOT NULL,
