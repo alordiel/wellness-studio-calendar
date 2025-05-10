@@ -1,5 +1,6 @@
 <template>
   <div class="p-6">
+    <router-link to="/" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</router-link>
     <!-- Header with Add Button -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-gray-800">Location Management</h1>
