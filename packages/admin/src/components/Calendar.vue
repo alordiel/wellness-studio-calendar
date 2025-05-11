@@ -8,6 +8,7 @@
     >
       <!-- Group Header Slot -->
       <template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
+        <template :ref="(el) => { groupHeaders[item.value] = { item, toggleGroup, isGroupOpen } }"/>
         <tr class="bg-grey-lighten-3">
           <td :colspan="columns.length">
             <v-btn
@@ -248,7 +249,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+const groupHeaders = ref([])
+
+ onMounted(() => {
+    Object.values(groupHeaders.value).forEach(header => {
+      header.toggleGroup(header.item)
+    })
+  })
 
 // Reactive data
 const eventDialog = ref(false)
