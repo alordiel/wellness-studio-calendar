@@ -74,6 +74,7 @@ function wsc_create_database_tables() {
         `payment` varchar(255) NOT NULL,
         `cancelation_hash` varchar(255) NOT NULL,
         `cancel_before` tinyint(1) NOT NULL,
+        `cancelled_by` varchar(16) NULL,
         `user_notes` varchar(500) NOT NULL,
         `admin_notes` varchar(500) NOT NULL,
         
