@@ -37,7 +37,7 @@
       <v-tabs-window-item value="events-preview">
         <!-- Events Preview content will be added later -->
         <div class="text-center py-6">
-          <p>Events Preview - To be implemented</p>
+          <Calendar></Calendar>
         </div>
       </v-tabs-window-item>
     </v-tabs-window>
@@ -167,6 +167,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import Calendar from "../components/Calendar.vue";
 
 // Reactive data
 const activeTab = ref('reservations')
