@@ -6,6 +6,7 @@
     <p>Email templates</p>
     <p>Captcha (for submitting reservations)</p>
     <p>May be waiting list</p>
+    <p>Show one/two weeks/ month ahead</p>
   </div>
 </template>
 
