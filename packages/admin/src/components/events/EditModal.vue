@@ -1,5 +1,5 @@
 <template>
-  <v-modal v-model="modalState" width="auto">
+  <v-dialog v-model="modalState" width="auto">
 
         <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
 
@@ -134,11 +134,11 @@
             </button>
           </div>
         </form>
-  </v-modal>
+  </v-dialog>
 </template>
 
 <script setup>
-import {ref, reactive, computed, onMounted} from 'vue'
+import {ref, reactive, computed, onMounted, watch} from 'vue'
 
 const emit = defineEmits(['close'])
 const props = defineProps(['eventIndex', 'showModal'])
@@ -184,10 +184,9 @@ const weekDays = [
   { label: 'Sunday', value: 'sunday' }
 ]
 
-onMounted(() => {
-  modalState.value = props.showModal
-});
-
+watch(() => props.showModal, (newVal) => {
+  modalState.value = newVal
+})
 
 // Computed properties
 const modalTitle = computed(() => isEditing ? 'Edit Event' : 'Add New Event')

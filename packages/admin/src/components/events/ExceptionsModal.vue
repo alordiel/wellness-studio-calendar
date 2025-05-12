@@ -1,5 +1,5 @@
 <template>
-  <v-modal v-model="modalState" width="auto">
+  <v-dialog v-model="modalState" width="auto">
     <div class="bg-white rounded-lg p-6 w-full max-w-sm">
       <h2 class="text-xl font-bold mb-4">Add exception</h2>
       <p class="text-gray-600 mb-6">Reschedule or cancel this event for particular date.</p>
@@ -38,11 +38,11 @@
         </v-btn>
       </div>
     </div>
-  </v-modal>
+  </v-dialog>
 </template>
 
 <script setup>
-import {ref, onMounted} from "vue";
+import {ref, onMounted, watch} from "vue";
 
 const emit = defineEmits(['close'])
 const props = defineProps(['eventIndex', 'showModal'])
@@ -60,9 +60,9 @@ const cancelException = () => {
   emit('close');
 }
 
-onMounted(() => {
-  modalState.value = props.showModal
-});
+watch(() => props.showModal, (newVal) => {
+  modalState.value = newVal
+})
 const confirmException = () => {
   if (!exceptionDate.value) {
     alert('Please select a date for the exception')

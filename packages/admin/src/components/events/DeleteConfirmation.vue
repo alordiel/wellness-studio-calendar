@@ -1,5 +1,5 @@
 <template>
-  <v-modal v-model="modalState" width="auto">
+  <v-dialog v-model="modalState" width="auto">
     <v-card
         max-width="400"
         prepend-icon="mdi-delete"
@@ -21,11 +21,11 @@
         </div>
       </template>
     </v-card>
-  </v-modal>
+  </v-dialog>
 </template>
 
 <script setup>
-import {ref, onMounted} from "vue";
+import {ref, onMounted, watch} from "vue";
 import {useEventsStore} from "../../store/event.js";
 
 const store = useEventsStore();
@@ -34,9 +34,11 @@ const props = defineProps(['eventIndex', 'showModal'])
 const isDeleting = ref(false);
 const modalState = ref(false);
 
-onMounted(() => {
-  modalState.value = props.showModal
-});
+// Watch for changes to the prop and update local state
+watch(() => props.showModal, (newVal) => {
+  modalState.value = newVal
+})
+
 const deleteEvent = () => {
   isDeleting.value = true;
   store.deleteEvent(props.eventIndex)
