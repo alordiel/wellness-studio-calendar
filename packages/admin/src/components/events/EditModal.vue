@@ -1,4 +1,5 @@
 <template>
+  <v-modal v-model="modalState" width="auto">
    <div class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
@@ -135,11 +136,16 @@
         </form>
       </div>
     </div>
-
+  </v-modal>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import {ref, reactive, computed, onMounted} from 'vue'
+
+const emit = defineEmits(['close'])
+const props = defineProps(['eventIndex', 'showModal'])
+
+const modalState = ref(false);
 const formData = reactive({
   event_name: '',
   instructor: '',
@@ -166,6 +172,7 @@ import { ColorPicker } from 'vue3-colorpicker'
 const activities = ref(['Morning Yoga', 'Advanced Yoga', 'Digital Marketing Workshop', 'Web Development Bootcamp'])
 const instructors = ref(['John Smith', 'Sarah Johnson', 'Michael Brown', 'Emily Davis'])
 const locations = ref(['Grand Ballroom', 'Conference Hall A', 'Training Room 1', 'Outdoor Pavilion'])
+const isEditing = props.eventIndex !== null;
 
 const weekDays = [
   { label: 'Monday', value: 'monday' },
@@ -177,21 +184,19 @@ const weekDays = [
   { label: 'Sunday', value: 'sunday' }
 ]
 
+onMounted(() => {
+  modalState.value = props.showModal
+});
+
 
 // Computed properties
-const modalTitle = computed(() => isEditing.value ? 'Edit Event' : 'Add New Event')
+const modalTitle = computed(() => isEditing ? 'Edit Event' : 'Add New Event')
 
 // Methods
 const formatWeekDays = (days) => {
   return days.map(day => day.charAt(0).toUpperCase() + day.slice(1)).join(', ')
 }
 
-const openAddModal = () => {
-  resetForm()
-  isEditing.value = false
-  editingIndex.value = null
-  showEditModal.value = true
-}
 
 const openEditModal = (index) => {
   const event = events.value[index]
@@ -203,13 +208,12 @@ const openEditModal = (index) => {
   formData.start_time = event.start_time
   formData.end_time = event.end_time
   formData.places = event.places
-  isEditing.value = true
-  editingIndex.value = index
-  showEditModal.value = true
 }
 
 const closeModal = () => {
-  resetForm()
+  resetForm();
+  modalState.value = false
+  emit('close');
 }
 
 /**
