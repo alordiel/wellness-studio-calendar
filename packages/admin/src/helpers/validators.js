@@ -1,0 +1,3 @@
+function validateEventForm(event) {
+
+}
