@@ -1,7 +1,6 @@
 <template>
   <v-modal v-model="modalState" width="auto">
-   <div class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+
         <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
 
         <form @submit.prevent="handleSubmit">
@@ -134,8 +133,6 @@
             </button>
           </div>
         </form>
-      </div>
-    </div>
   </v-modal>
 </template>
 
