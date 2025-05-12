@@ -13,11 +13,11 @@
               text="Cancel"
               @click="closeDeleteDialog"
           ></v-btn>
-          <v-btn>
+          <v-btn
             class="ms-auto"
             text="Delete"
             @click="deleteEvent"
-          </v-btn>
+          ></v-btn>
         </div>
       </template>
     </v-card>
@@ -26,7 +26,9 @@
 
 <script setup>
 import {ref, onMounted} from "vue";
+import {useEventsStore} from "../../store/event.js";
 
+const store = useEventsStore();
 const emit = defineEmits(['close'])
 const props = defineProps(['eventIndex', 'showModal'])
 const isDeleting = ref(false);
@@ -37,6 +39,10 @@ onMounted(() => {
 });
 const deleteEvent = () => {
   isDeleting.value = true;
+  store.deleteEvent(props.eventIndex)
+      .then(() => {
+        isDeleting.value = false
+      });
   closeDeleteDialog()
 }
 const closeDeleteDialog = () => {

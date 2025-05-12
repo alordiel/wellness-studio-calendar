@@ -127,6 +127,7 @@
             </button>
             <button
               type="submit"
+              @click="handleSubmit"
               class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition duration-200"
             >
               {{ isEditing ? 'Update' : 'Add' }}
@@ -165,11 +166,13 @@ const errors = reactive({
   places: ''
 })
 import { ColorPicker } from 'vue3-colorpicker'
+import {useEventsStore} from "../../store/event.js";
 // Sample data for dropdowns - replace with real data from your store/API
 const activities = ref(['Morning Yoga', 'Advanced Yoga', 'Digital Marketing Workshop', 'Web Development Bootcamp'])
 const instructors = ref(['John Smith', 'Sarah Johnson', 'Michael Brown', 'Emily Davis'])
 const locations = ref(['Grand Ballroom', 'Conference Hall A', 'Training Room 1', 'Outdoor Pavilion'])
 const isEditing = props.eventIndex !== null;
+const store = useEventsStore();
 
 const weekDays = [
   { label: 'Monday', value: 'monday' },
@@ -305,10 +308,10 @@ const handleSubmit = () => {
     places: formData.places
   }
 
-  if (isEditing.value) {
-    events.value[editingIndex.value] = eventData
+  if (props.eventIndex !== null) {
+    store.updateEvent(props.eventIndex, eventData);
   } else {
-    events.value.push(eventData)
+    store.addEvent(eventData)
   }
 
   closeModal()

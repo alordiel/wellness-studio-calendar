@@ -102,21 +102,12 @@ import 'vue3-colorpicker/style.css'
 import DeleteConfirmation from "../components/events/DeleteConfirmation.vue";
 import ExceptionsModal from "../components/events/ExceptionsModal.vue";
 import EditModal from "../components/events/EditModal.vue";
+import { storeToRefs } from 'pinia'
+import { useEventsStore } from '../store/event.js'
 
-// Reactive data
-const events = ref([
-  // Sample data - remove this when connecting to real data source
-  {
-    event_name: 'Morning Yoga',
-    instructor: 'John Smith',
-    location: 'Grand Ballroom',
-    color: '#3B82F6',
-    week_day: ['monday', 'wednesday', 'friday'],
-    start_time: '08:00',
-    end_time: '09:30',
-    places: 30
-  }
-])
+
+const eventsStore = useEventsStore()
+const { events } = storeToRefs(eventsStore)
 
 const showEditModal = ref(false)
 const showDeleteConfirm = ref(false)

@@ -64,12 +64,12 @@ export const useEventsStore = defineStore('events', {
     },
 
     actions: {
-        addEvent(event)  {
+        async addEvent(event)  {
             this.events.value.push(event)
             // Example: await saveEventToWordPress(event)
             return true
         },
-        updateEvent (index, updatedEvent)  {
+        async updateEvent (index, updatedEvent)  {
             if (index >= 0 && index < this.events.length - 1 ) {
                 this.events[index] = updatedEvent
                 // Example: await updateEventInWordPress(events.value[index])
@@ -77,7 +77,7 @@ export const useEventsStore = defineStore('events', {
             }
             return false
         },
-        deleteEvent (index) {
+        async deleteEvent (index) {
             if (index >= 0 && index < this.events.length - 1 ) {
                 this.events.splice(index, 1)
                 // Here you would typically make an AJAX call to delete from WordPress
