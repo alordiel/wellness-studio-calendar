@@ -31,8 +31,8 @@
         <tbody class="divide-y divide-gray-200">
         <tr v-for="(event, index) in events" :key="index" class="hover:bg-gray-50">
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.event_name }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.instructor }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.location }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ getInstructor(event.instructor) }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><p v-html="getLocation(event.location)"></p></td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="flex items-center">
               <div
@@ -104,10 +104,14 @@ import ExceptionsModal from "../components/events/ExceptionsModal.vue";
 import EditModal from "../components/events/EditModal.vue";
 import { storeToRefs } from 'pinia'
 import { useEventsStore } from '../store/event.js'
+import {useInstructorStore} from "../store/instructor.js";
+import {useLocationStore} from "../store/location.js";
 
 
 const eventsStore = useEventsStore()
 const { events } = storeToRefs(eventsStore)
+const instructorStore = useInstructorStore()
+const locationStore = useLocationStore()
 
 const showEditModal = ref(false)
 const showDeleteConfirm = ref(false)
@@ -136,6 +140,16 @@ const closeModal = () => {
   editEventIndex.value = null;
   deleteEventIndex.value = null;
   exceptionEventIndex.value = null;
+}
+
+const getInstructor = (id) => {
+  const user = instructorStore.getInstructorById(id)
+  return user.name
+}
+
+const getLocation = (id) => {
+  const location = locationStore.getLocationById(id)
+  return location.address + ' <br> <strong>' + location.hall + '</strong>'
 }
 
 </script>
