@@ -1,15 +1,19 @@
 <template>
-  <div class="p-6">
+  <div>
     <!-- Header with Add Button -->
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Events Management</h1>
-      <router-link to="/" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</router-link>
-      <button
+      <h1 >Events Management</h1>
+      <router-link to="/" >← Back to Dashboard</router-link>
+      <v-btn
+          rounded="0"
+          min-width="200px"
+          icon="mdi-plus"
+          color="#155dcf"
+          variant="flat"
           @click="showEditModal = true"
-          class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
       >
         Add New Entry
-      </button>
+      </v-btn>
     </div>
 
     <!-- Events Table -->

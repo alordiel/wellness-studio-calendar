@@ -54,12 +54,10 @@
 
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
-            <color-picker
-              v-model:pureColor="formData.color"
-              format="hex"
-              shape="square"
-              :disable-alpha="true"
-            />
+            <v-color-picker
+              v-model="formData.color"
+              mode="hex"
+            ></v-color-picker>
             <p v-if="errors.color" class="text-red-500 text-xs mt-1">{{ errors.color }}</p>
           </div>
 
