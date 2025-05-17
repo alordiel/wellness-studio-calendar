@@ -20,7 +20,6 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Name</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instructor</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Week Day</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Time</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Time</th>
@@ -33,15 +32,6 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.event_name }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ getInstructor(event.instructor) }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><p v-html="getLocation(event.location)"></p></td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex items-center">
-              <div
-                  class="w-6 h-6 rounded border border-gray-300"
-                  :style="{ backgroundColor: event.color }"
-              ></div>
-              <span class="ml-2 text-sm text-gray-900">{{ event.color }}</span>
-            </div>
-          </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.week_day }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.start_time }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.end_time }}</td>

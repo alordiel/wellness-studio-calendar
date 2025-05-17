@@ -8,24 +8,28 @@ export const useActivityStore = defineStore('activities', {
                 id: 1,
                 name: 'Fitness Training',
                 description: 'General fitness training to improve overall health and well-being.',
+                color: '#4CAF50',
                 link: '/activities/fitness-training'
             },
             {
                 id: 2,
                 name: 'Meditation',
                 description: 'Guided meditation sessions for mental clarity and stress reduction.',
+                color: '#F44336',
                 link: '/activities/meditation'
             },
             {
                 id: 3,
                 name: 'Swimming',
                 description: 'Swimming lessons and free swimming sessions for all levels.',
+                 color: '#2196F3',
                 link: '/activities/swimming'
             },
             {
                 id: 4,
                 name: 'Dance',
                 description: 'Various dance styles including ballet, contemporary, and hip-hop.',
+                 color: '#FF9800',
                 link: '/activities/dance'
             }
         ]
