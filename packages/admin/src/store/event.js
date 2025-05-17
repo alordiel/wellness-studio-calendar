@@ -5,6 +5,7 @@ export const useEventsStore = defineStore('events', {
     state: () => ({
         events: [
             {
+                id:1,
                 event_name: 'Morning Yoga',
                 instructor: 1,
                 location: 2,
@@ -15,6 +16,7 @@ export const useEventsStore = defineStore('events', {
                 places: 15
             },
             {
+                id:2,
                 event_name: 'Boxing Class',
                 instructor: 3,
                 location: 1,
@@ -25,6 +27,7 @@ export const useEventsStore = defineStore('events', {
                 places: 10
             },
             {
+                id:3,
                 event_name: 'Pilates',
                 instructor: 2,
                 location: 2,
@@ -35,6 +38,7 @@ export const useEventsStore = defineStore('events', {
                 places: 12
             },
             {
+                id:4,
                 event_name: 'Zumba',
                 instructor: 4,
                 location: 3,
