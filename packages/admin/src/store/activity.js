@@ -22,14 +22,14 @@ export const useActivityStore = defineStore('activities', {
                 id: 3,
                 name: 'Swimming',
                 description: 'Swimming lessons and free swimming sessions for all levels.',
-                 color: '#2196F3',
+                color: '#2196F3',
                 link: '/activities/swimming'
             },
             {
                 id: 4,
                 name: 'Dance',
                 description: 'Various dance styles including ballet, contemporary, and hip-hop.',
-                 color: '#FF9800',
+                color: '#FF9800',
                 link: '/activities/dance'
             }
         ]

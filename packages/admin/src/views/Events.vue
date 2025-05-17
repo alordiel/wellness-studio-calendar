@@ -13,7 +13,7 @@
     </div>
 
     <!-- Events Table -->
-    <div v-if="events.length > 0" class="overflow-x-auto shadow-md rounded-lg">
+    <div v-if="formattedEvents.length > 0" class="overflow-x-auto shadow-md rounded-lg">
       <table class="w-full bg-white">
         <thead class="bg-gray-50">
         <tr>
@@ -28,10 +28,15 @@
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-        <tr v-for="(event, index) in events" :key="index" class="hover:bg-gray-50">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.event_name }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ getInstructor(event.instructor) }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><p v-html="getLocation(event.location)"></p></td>
+        <tr v-for="(event, index) in formattedEvents" :key="index" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <div class="activity-cell" :style="{borderColor: event.color}">
+              {{ event.activity_name }}
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.instructor }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><p v-html="event.location"></p>
+          </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.week_day }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.start_time }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.end_time }}</td>
@@ -87,21 +92,25 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import 'vue3-colorpicker/style.css'
 import DeleteConfirmation from "../components/events/DeleteConfirmation.vue";
 import ExceptionsModal from "../components/events/ExceptionsModal.vue";
 import EditModal from "../components/events/EditModal.vue";
-import { storeToRefs } from 'pinia'
-import { useEventsStore } from '../store/event.js'
+import {storeToRefs} from 'pinia'
+
+import {useEventsStore} from '../store/event.js'
 import {useInstructorStore} from "../store/instructor.js";
 import {useLocationStore} from "../store/location.js";
-
+import {useActivityStore} from "../store/activity.js";
 
 const eventsStore = useEventsStore()
-const { events } = storeToRefs(eventsStore)
+const {events} = storeToRefs(eventsStore)
 const instructorStore = useInstructorStore()
 const locationStore = useLocationStore()
+const activityStore = useActivityStore()
+
+const formattedEvents = ref([]);
 
 const showEditModal = ref(false)
 const showDeleteConfirm = ref(false)
@@ -110,6 +119,28 @@ const showExceptionsModal = ref(false)
 const deleteEventIndex = ref(null);
 const editEventIndex = ref(null);
 const exceptionEventIndex = ref(null);
+
+onMounted(() => {
+  events.value.forEach((event) => {
+    const activity = activityStore.getActivityById(event.activity_id)
+    const location = locationStore.getLocationById(event.location_id)
+    const user = instructorStore.getInstructorById(event.instructor_id)
+    formattedEvents.value.push({
+      activity_name: activity.name,
+      activity_id: event.activity_id,
+      color: activity.color,
+      instructor: user.name,
+      instructor_id: event.instructor_id,
+      location: location.address + ' <br> <strong>' + location.hall + '</strong>',
+      location_id: event.location_id,
+      week_day: event.week_day,
+      start_time: event.start_time,
+      end_time: event.end_time,
+      places: event.places
+    })
+  })
+})
+
 const openEditModal = (index) => {
   showEditModal.value = true;
   editEventIndex.value = index;
@@ -132,14 +163,10 @@ const closeModal = () => {
   exceptionEventIndex.value = null;
 }
 
-const getInstructor = (id) => {
-  const user = instructorStore.getInstructorById(id)
-  return user.name
-}
-
-const getLocation = (id) => {
-  const location = locationStore.getLocationById(id)
-  return location.address + ' <br> <strong>' + location.hall + '</strong>'
-}
-
 </script>
+
+<style scoped>
+.activity-cell {
+  border-left-width: 10px;
+}
+</style>

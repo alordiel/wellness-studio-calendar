@@ -6,9 +6,9 @@ export const useEventsStore = defineStore('events', {
         events: [
             {
                 id:1,
-                event_name: 'Morning Yoga',
-                instructor: 1,
-                location: 2,
+                activity_id: 1,
+                instructor_id: 1,
+                location_id: 2,
                 week_day: 'Monday',
                 start_time: '07:00',
                 end_time: '08:30',
@@ -16,9 +16,9 @@ export const useEventsStore = defineStore('events', {
             },
             {
                 id:2,
-                event_name: 'Boxing Class',
-                instructor: 3,
-                location: 1,
+                activity_id: 1,
+                instructor_id: 3,
+                location_id: 1,
                 week_day: 'Tuesday',
                 start_time: '18:00',
                 end_time: '19:30',
@@ -26,9 +26,9 @@ export const useEventsStore = defineStore('events', {
             },
             {
                 id:3,
-                event_name: 'Pilates',
-                instructor: 2,
-                location: 2,
+                activity_id: 2,
+                instructor_id: 2,
+                location_id: 2,
                 week_day: 'Wednesday',
                 start_time: '12:00',
                 end_time: '13:00',
@@ -36,9 +36,9 @@ export const useEventsStore = defineStore('events', {
             },
             {
                 id:4,
-                event_name: 'Zumba',
-                instructor: 4,
-                location: 3,
+                activity_id: 2,
+                instructor_id: 4,
+                location_id: 3,
                 week_day: 'Friday',
                 start_time: '17:30',
                 end_time: '18:30',
@@ -50,7 +50,7 @@ export const useEventsStore = defineStore('events', {
     getters: {
         getAllEvents: (state) => {
             return [...state.events.value].sort((a, b) =>
-                a.event_name.localeCompare(b.event_name)
+                a.activity_id.localeCompare(b.activity_id)
             )
         },
         getEventByIndex: (state) => {
