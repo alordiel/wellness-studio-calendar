@@ -54,9 +54,9 @@ function wsc_create_database_tables() {
     // Events table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_events` (
         `ID` int(8) AUTO_INCREMENT NOT NULL UNIQUE,
-        `activity` int(4) NOT NULL,
-        `instructor` int(4) NOT NULL,
-        `location` int(2) NOT NULL,
+        `activity_id` int(4) NOT NULL,
+        `instructor_id` int(4) NOT NULL,
+        `location_id` int(2) NOT NULL,
         `week_day` varchar(20) NOT NULL,
         `start_time` time NOT NULL,
         `end_time` time NOT NULL,
@@ -67,7 +67,7 @@ function wsc_create_database_tables() {
     // Reservations table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_reservations` (
         `ID` int(16) AUTO_INCREMENT NOT NULL UNIQUE,
-        `event` int(8) NOT NULL,
+        `event_id` int(8) NOT NULL,
         `user_name` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
         `phone` varchar(255) NOT NULL,
@@ -84,7 +84,7 @@ function wsc_create_database_tables() {
     // Exceptions table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_exceptions` (
         `ID` int AUTO_INCREMENT NOT NULL UNIQUE,
-        `event` int(8) NOT NULL,
+        `event_id` int(8) NOT NULL,
         `type` varchar(50) NOT NULL,
         `exception_date` date NOT NULL,
         `new_date` date NOT NULL,
@@ -95,27 +95,23 @@ function wsc_create_database_tables() {
 
     // Add foreign key constraints
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk1` FOREIGN KEY (`activity`) 
+        ADD CONSTRAINT `event_fk1` FOREIGN KEY (`activity_id`) 
         REFERENCES `{$wpdb->prefix}wsc_activity`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk2` FOREIGN KEY (`instructor`) 
+        ADD CONSTRAINT `event_fk2` FOREIGN KEY (`instructor_id`) 
         REFERENCES `{$wpdb->prefix}wsc_instructors`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk3` FOREIGN KEY (`location`) 
-        REFERENCES `{$wpdb->prefix}wsc_locations`(`ID`);";
-
-    $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk4` FOREIGN KEY (`room`) 
+        ADD CONSTRAINT `event_fk3` FOREIGN KEY (`location_id`) 
         REFERENCES `{$wpdb->prefix}wsc_locations`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_reservations` 
-        ADD CONSTRAINT `reservations_fk1` FOREIGN KEY (`event`) 
+        ADD CONSTRAINT `reservations_fk1` FOREIGN KEY (`event_id`) 
         REFERENCES `{$wpdb->prefix}wsc_events`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_exceptions` 
-        ADD CONSTRAINT `exceptions_fk1` FOREIGN KEY (`event`) 
+        ADD CONSTRAINT `exceptions_fk1` FOREIGN KEY (`event_id`) 
         REFERENCES `{$wpdb->prefix}wsc_events`(`ID`);";
 
     // Require dbDelta function
