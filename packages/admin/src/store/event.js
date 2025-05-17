@@ -36,7 +36,7 @@ export const useEventsStore = defineStore('events', {
             },
             {
                 id:4,
-                activity_id: 2,
+                activity_id: 4,
                 instructor_id: 4,
                 location_id: 3,
                 week_day: 'Friday',

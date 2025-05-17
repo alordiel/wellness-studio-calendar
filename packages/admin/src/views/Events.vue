@@ -29,10 +29,9 @@
         </thead>
         <tbody class="divide-y divide-gray-200">
         <tr v-for="(event, index) in formattedEvents" :key="index" class="hover:bg-gray-50">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            <div class="activity-cell" :style="{borderColor: event.color}">
-              {{ event.activity_name }}
-            </div>
+          <td class="px-6 py-4 whitespace-nowrap text-sm activity-cell text-gray-900"
+              :style="{borderColor: event.color}">
+            {{ event.activity_name }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ event.instructor }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><p v-html="event.location"></p>
