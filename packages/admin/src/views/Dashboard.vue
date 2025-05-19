@@ -1,48 +1,68 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
-    <h1 class="text-3xl font-bold text-center mb-8">Admin Dashboard</h1>
+  <v-container class="pa-4">
+    <h1 class="text-h4 font-weight-bold text-center mb-8">Admin Dashboard</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <router-link
-          v-for="block in dashboardBlocks"
-          :key="block.name"
-          :to="block.route"
-          class="group"
-          :aria-label="block.ariaLabel"
+    <v-row>
+      <v-col
+        v-for="block in dashboardBlocks"
+        :key="block.name"
+        cols="12"
+        sm="6"
+        md="4"
       >
-        <div
-            class="relative overflow-hidden rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
-            :class="[
-            'p-6 h-32 border-2 shadow-md hover:shadow-lg',
-            block.borderColor,
-            block.bgColor,
-            block.hoverColor
-          ]"
+        <v-card
+          :to="block.route"
+          class="h-100"
+          elevation="2"
+          hover
+          link
         >
-          <div class="absolute inset-0 flex items-center justify-center">
-            <h2 class="text-2xl font-semibold text-center" :class="block.textColor">
+          <v-card-item>
+            <v-card-title class="text-h5">
               {{ block.title }}
-            </h2>
-          </div>
-        </div>
-      </router-link>
-    </div>
-
-
-  </div>
+              <v-badge
+                v-if="block.name === 'reservations' && reservationsCount"
+                :content="reservationsCount.toString()"
+                color="error"
+                inline
+                class="ml-2"
+              ></v-badge>
+            </v-card-title>
+            <v-card-text>
+              {{ block.description }}
+            </v-card-text>
+          </v-card-item>
+          <v-card-actions>
+            <v-btn
+              variant="text"
+              color="primary"
+            >
+              View {{ block.title }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useReservationStore } from '@/stores/reservationStore';
+
 interface DashboardBlock {
   name: string;
   title: string;
   route: string;
   ariaLabel: string;
-  borderColor: string;
-  bgColor: string;
-  hoverColor: string;
-  textColor: string;
+  description: string;
 }
+
+// Access the reservation store
+const reservationStore = useReservationStore();
+
+// Compute the number of reservations from the getter
+const reservationsCount = computed(() => reservationStore.getNumberOfReservations);
 
 const dashboardBlocks: DashboardBlock[] = [
   {
@@ -50,60 +70,42 @@ const dashboardBlocks: DashboardBlock[] = [
     title: 'Reservations',
     route: '/reservations',
     ariaLabel: 'Navigate to Reservations page',
-    borderColor: 'border-blue-300',
-    bgColor: 'bg-blue-50',
-    hoverColor: 'hover:bg-blue-100',
-    textColor: 'text-blue-800'
+    description: 'Manage all bookings and customer reservations in one place.'
   },
   {
     name: 'activities',
     title: 'Activities',
     route: '/activities',
     ariaLabel: 'Navigate to Activities page',
-    borderColor: 'border-green-300',
-    bgColor: 'bg-green-50',
-    hoverColor: 'hover:bg-green-100',
-    textColor: 'text-green-800'
+    description: 'Configure and manage all available activities for scheduling.'
   },
   {
     name: 'events',
     title: 'Events',
     route: '/events',
     ariaLabel: 'Navigate to Events page',
-    borderColor: 'border-purple-300',
-    bgColor: 'bg-purple-50',
-    hoverColor: 'hover:bg-purple-100',
-    textColor: 'text-purple-800'
+    description: 'Create and manage special events and seasonal promotions.'
   },
   {
     name: 'instructors',
     title: 'Instructors',
     route: '/instructors',
     ariaLabel: 'Navigate to Instructors page',
-    borderColor: 'border-red-300',
-    bgColor: 'bg-red-50',
-    hoverColor: 'hover:bg-red-100',
-    textColor: 'text-red-800'
+    description: 'Manage your team of instructors and their availability.'
   },
   {
     name: 'locations',
     title: 'Locations',
     route: '/locations',
     ariaLabel: 'Navigate to Locations page',
-    borderColor: 'border-indigo-300',
-    bgColor: 'bg-indigo-50',
-    hoverColor: 'hover:bg-indigo-100',
-    textColor: 'text-indigo-800'
+    description: 'Set up and manage multiple venues and locations.'
   },
   {
     name: 'settings',
     title: 'Settings',
     route: '/settings',
-    ariaLabel: 'Navigate toSettings page',
-    borderColor: 'border-yellow-300',
-    bgColor: 'bg-yellow-50',
-    hoverColor: 'hover:bg-yellow-100',
-    textColor: 'text-yellow-800'
+    ariaLabel: 'Navigate to Settings page',
+    description: 'Configure system settings and preferences.'
   }
 ];
 </script>

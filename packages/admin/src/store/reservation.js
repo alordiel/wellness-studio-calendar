@@ -67,6 +67,9 @@ export const useReservationStore = defineStore('reservations', {
         },
         getActiveReservations: (state) => {
             return state.reservations.filter(reservation => reservation.cancelled_by === null)
+        },
+        getNumberOfReservations: (state) => {
+            return this.getActiveReservations().length;
         }
     },
 
