@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useReservationStore } from '@/stores/reservationStore';
+import { useReservationStore } from '../store/reservation';
 
 interface DashboardBlock {
   name: string;
