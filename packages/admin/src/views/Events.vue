@@ -96,7 +96,6 @@
 
 <script setup>
 import {onMounted, ref} from 'vue'
-import 'vue3-colorpicker/style.css'
 import DeleteConfirmation from "../components/events/DeleteConfirmation.vue";
 import ExceptionsModal from "../components/events/ExceptionsModal.vue";
 import EditModal from "../components/events/EditModal.vue";
