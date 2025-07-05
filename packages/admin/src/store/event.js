@@ -44,18 +44,16 @@ export const useEventsStore = defineStore('events', {
                 end_time: '18:30',
                 places: 20
             }
-        ]
+        ],
     }),
 
     getters: {
-        getAllEvents: (state) => {
-            return [...state.events.value].sort((a, b) =>
-                a.activity_id.localeCompare(b.activity_id)
-            )
+        getAllEvents (state) {
+            return [...state.events].sort((a, b) => a.activity_id.localeCompare(b.activity_id));
         },
-        getEventByIndex: (state) => {
+        getEventByIndex (state) {
             return (index) => {
-                if (index >= 0 && index < state.events.length - 1) {
+                if (index >= 0 && index < state.events.length) {
                     return state.events[index]
                 }
                 return null
@@ -70,15 +68,16 @@ export const useEventsStore = defineStore('events', {
             return true
         },
         async updateEvent (index, updatedEvent)  {
-            if (index >= 0 && index < this.events.length - 1 ) {
-                this.events[index] = updatedEvent
+            console.log('update event', index, updatedEvent)
+            if (index >= 0 && index < this.events.length ) {
+                this.events[index].value = updatedEvent
                 // Example: await updateEventInWordPress(events.value[index])
                 return true
             }
             return false
         },
         async deleteEvent (index) {
-            if (index >= 0 && index < this.events.length - 1 ) {
+            if (index >= 0 && index < this.events.length ) {
                 this.events.splice(index, 1)
                 // Here you would typically make an AJAX call to delete from WordPress
                 return true
