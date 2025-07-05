@@ -160,7 +160,7 @@ const errors = reactive({
   end_time: '',
   places: ''
 })
-import {ColorPicker} from 'vue3-colorpicker'
+
 import {useEventsStore} from "../../store/event.js";
 // Sample data for dropdowns - replace with real data from your store/API
 const activities = ref(['Morning Yoga', 'Advanced Yoga', 'Digital Marketing Workshop', 'Web Development Bootcamp'])
