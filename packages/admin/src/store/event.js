@@ -62,28 +62,55 @@ export const useEventsStore = defineStore('events', {
     },
 
     actions: {
-        async addEvent(event)  {
-            this.events.value.push(event)
-            // Example: await saveEventToWordPress(event)
+        async addEvent(event) {
+            // Generate new ID (in real app, this would come from backend)
+            const newId = Math.max(...this.events.map(e => e.id)) + 1
+            const newEvent = {
+                id: newId,
+                ...event
+            }
+            this.events.push(newEvent)
+            // Example: await saveEventToWordPress(newEvent)
             return true
         },
-        async updateEvent (index, updatedEvent)  {
+
+        async updateEvent(index, updatedEvent) {
             console.log('update event', index, updatedEvent)
-            if (index >= 0 && index < this.events.length ) {
-                this.events[index].value = updatedEvent
-                // Example: await updateEventInWordPress(events.value[index])
+            if (index >= 0 && index < this.events.length) {
+                // Keep the original ID
+                const originalId = this.events[index].id
+                this.events[index] = {
+                    id: originalId,
+                    ...updatedEvent
+                }
+                // Example: await updateEventInWordPress(this.events[index])
                 return true
             }
             return false
         },
-        async deleteEvent (activityID) {
+
+        // Alternative method to update by ID (recommended for future use)
+        async updateEventById(id, updatedEvent) {
+            const index = this.events.findIndex(event => event.id === id)
+            if (index !== -1) {
+                this.events[index] = {
+                    id,
+                    ...updatedEvent
+                }
+                // Example: await updateEventInWordPress(this.events[index])
+                return true
+            }
+            return false
+        },
+
+         async deleteEvent (activityID) {
 
             const index = this.events.findIndex( event => event.activity_id === activityID)
             this.events.splice(index, 1)
             // Here you would typically make an AJAX call to delete from WordPress
             return true
+        },
 
-        }
     }
 
 })

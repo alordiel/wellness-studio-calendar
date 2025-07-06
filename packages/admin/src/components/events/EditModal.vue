@@ -1,159 +1,177 @@
 <template>
-  <v-dialog v-model="modalState" width="auto">
+  <v-dialog v-model="modalState" width="700" persistent>
     <v-card>
-      <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
+      <v-card-title class="text-h5">
+        {{ modalTitle }}
+      </v-card-title>
 
-      <form @submit.prevent="handleSubmit">
-        <div class="mb-4">
-          <label>Event Name</label>
-          <select
-              v-model="formData.event_name"
-              required
-              :class="{ 'border-red-500': errors.event_name }"
-          >
-            <option value="">Select an activity</option>
-            <option v-for="activity in activities" :key="activity" :value="activity">
-              {{ activity }}
-            </option>
-          </select>
-          <p v-if="errors.event_name" class="text-red-500 text-xs mt-1">{{ errors.event_name }}</p>
-        </div>
+      <v-card-text>
+        <v-form @submit.prevent="handleSubmit">
+          <!-- Activity Selection -->
+          <v-select
+            v-model="formData.activity_id"
+            :items="activityOptions"
+            item-title="name"
+            item-value="id"
+            label="Activity"
+            variant="outlined"
+            density="comfortable"
+            :error-messages="errors.activity_id"
+            class="mb-4"
+          ></v-select>
 
-        <div class="mb-4">
-          <label>Instructor</label>
-          <select
-              v-model="formData.instructor"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.instructor }"
-          >
-            <option value="">Select an instructor</option>
-            <option v-for="instructor in instructors" :key="instructor" :value="instructor">
-              {{ instructor }}
-            </option>
-          </select>
-          <p v-if="errors.instructor" class="text-red-500 text-xs mt-1">{{ errors.instructor }}</p>
-        </div>
+          <!-- Instructor Selection -->
+          <v-select
+            v-model="formData.instructor_id"
+            :items="instructorOptions"
+            item-title="name"
+            item-value="id"
+            label="Instructor"
+            variant="outlined"
+            density="comfortable"
+            :error-messages="errors.instructor_id"
+            class="mb-4"
+          ></v-select>
 
-        <div class="mb-4">
-          <label>Location</label>
-          <select
-              v-model="formData.location"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.location }"
-          >
-            <option value="">Select a location</option>
-            <option v-for="location in locations" :key="location" :value="location">
-              {{ location }}
-            </option>
-          </select>
-          <p v-if="errors.location" class="text-red-500 text-xs mt-1">{{ errors.location }}</p>
-        </div>
+          <!-- Location Selection -->
+          <v-select
+            v-model="formData.location_id"
+            :items="locationOptions"
+            item-title="displayName"
+            item-value="id"
+            label="Location"
+            variant="outlined"
+            density="comfortable"
+            :error-messages="errors.location_id"
+            class="mb-4"
+          ></v-select>
 
-        <div class="mb-4">
-          <label>Color</label>
-          <v-color-picker
+          <!-- Color Picker -->
+          <div class="mb-4">
+            <v-label class="text-body-1 font-weight-medium mb-2">Color</v-label>
+            <v-color-picker
               v-model="formData.color"
               mode="hex"
-          ></v-color-picker>
-          <p v-if="errors.color" class="text-red-500 text-xs mt-1">{{ errors.color }}</p>
-        </div>
-
-        <div class="mb-4">
-          <label class="">Week Days</label>
-          <div class="grid grid-cols-3 gap-3">
-            <label v-for="day in weekDays" :key="day.value" class="flex items-center">
-              <input
-                  type="radio"
-                  v-model="formData.week_day"
-                  :value="day.value"
-                  class="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span class="text-sm text-gray-700">{{ day.label }}</span>
-            </label>
+              :error-messages="errors.color"
+              elevation="1"
+            ></v-color-picker>
           </div>
-          <p v-if="errors.week_day" class="text-red-500 text-xs mt-1">{{ errors.week_day }}</p>
-        </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label>Start Time</label>
-            <input
+          <!-- Week Day Selection (Radio Buttons) -->
+          <div class="mb-4">
+            <v-label class="text-body-1 font-weight-medium mb-2">Week Day</v-label>
+            <v-radio-group
+              v-model="formData.week_day"
+              :error-messages="errors.week_day"
+              inline
+              density="comfortable"
+            >
+              <v-radio
+                v-for="day in weekDays"
+                :key="day.value"
+                :label="day.label"
+                :value="day.value"
+                color="primary"
+              ></v-radio>
+            </v-radio-group>
+          </div>
+
+          <!-- Time Pickers -->
+          <v-row class="mb-4">
+            <v-col cols="6">
+              <v-label class="text-body-1 font-weight-medium mb-2">Start Time</v-label>
+              <v-time-picker
                 v-model="formData.start_time"
-                type="time"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :class="{ 'border-red-500': errors.start_time }"
-            />
-            <p v-if="errors.start_time" class="text-red-500 text-xs mt-1">{{ errors.start_time }}</p>
-          </div>
-          <div>
-            <label>End Time</label>
-            <input
+                format="24hr"
+                :error-messages="errors.start_time"
+                elevation="1"
+                width="100%"
+              ></v-time-picker>
+            </v-col>
+            <v-col cols="6">
+              <v-label class="text-body-1 font-weight-medium mb-2">End Time</v-label>
+              <v-time-picker
                 v-model="formData.end_time"
-                type="time"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :class="{ 'border-red-500': errors.end_time }"
-            />
-            <p v-if="errors.end_time" class="text-red-500 text-xs mt-1">{{ errors.end_time }}</p>
-          </div>
-        </div>
+                format="24hr"
+                :error-messages="errors.end_time"
+                elevation="1"
+                width="100%"
+              ></v-time-picker>
+            </v-col>
+          </v-row>
 
-        <div class="mb-6">
-          <label>Places</label>
-          <input
-              v-model.number="formData.places"
-              type="number"
-              min="1"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.places }"
-          />
-          <p v-if="errors.places" class="text-red-500 text-xs mt-1">{{ errors.places }}</p>
-        </div>
+          <!-- Places Input -->
+          <v-text-field
+            v-model.number="formData.places"
+            label="Number of Places"
+            type="number"
+            min="1"
+            variant="outlined"
+            density="comfortable"
+            :error-messages="errors.places"
+            class="mb-4"
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
 
-        <v-card-actions>
-          <v-btn
-              variant="plain"
-              @click="closeModal"
-              text="Close"
-          ></v-btn>
-          <v-btn
-              color="primary"
-              @click="handleSubmit"
-          >
-            {{ isEditing ? 'Update' : 'Add' }}
-          </v-btn>
-        </v-card-actions>
-      </form>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          variant="text"
+          @click="closeModal"
+          text="Cancel"
+        ></v-btn>
+        <v-btn
+          color="primary"
+          variant="flat"
+          @click="handleSubmit"
+        >
+          {{ isEditing ? 'Update' : 'Add' }}
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup>
-import {ref, reactive, computed, onMounted, watch} from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { VTimePicker } from 'vuetify/labs/VTimePicker'
+import { useEventsStore } from "../../store/event.js"
+import { useActivityStore } from "../../store/activity.js"
+import { useInstructorStore } from "../../store/instructor.js"
+import { useLocationStore } from "../../store/location.js"
 
 const emit = defineEmits(['close'])
 const props = defineProps(['eventIndex', 'showModal'])
 
-const modalState = ref(false);
+// Stores
+const eventsStore = useEventsStore()
+const activityStore = useActivityStore()
+const instructorStore = useInstructorStore()
+const locationStore = useLocationStore()
+
+// Store refs
+const { events } = storeToRefs(eventsStore)
+
+const modalState = ref(false)
+
+// Form data matching the actual event model
 const formData = reactive({
-  event_name: '',
-  instructor: '',
-  location: '',
+  activity_id: null,
+  instructor_id: null,
+  location_id: null,
   color: '#3B82F6',
-  week_day: [],
-  start_time: '',
-  end_time: '',
+  week_day: '',
+  start_time: null,
+  end_time: null,
   places: 1
 })
 
 const errors = reactive({
-  event_name: '',
-  instructor: '',
-  location: '',
+  activity_id: '',
+  instructor_id: '',
+  location_id: '',
   color: '',
   week_day: '',
   start_time: '',
@@ -161,69 +179,69 @@ const errors = reactive({
   places: ''
 })
 
-import {useEventsStore} from "../../store/event.js";
-// Sample data for dropdowns - replace with real data from your store/API
-const activities = ref(['Morning Yoga', 'Advanced Yoga', 'Digital Marketing Workshop', 'Web Development Bootcamp'])
-const instructors = ref(['John Smith', 'Sarah Johnson', 'Michael Brown', 'Emily Davis'])
-const locations = ref(['Grand Ballroom', 'Conference Hall A', 'Training Room 1', 'Outdoor Pavilion'])
-const isEditing = props.eventIndex !== null;
-const store = useEventsStore();
-
 const weekDays = [
-  {label: 'Monday', value: 'monday'},
-  {label: 'Tuesday', value: 'tuesday'},
-  {label: 'Wednesday', value: 'wednesday'},
-  {label: 'Thursday', value: 'thursday'},
-  {label: 'Friday', value: 'friday'},
-  {label: 'Saturday', value: 'saturday'},
-  {label: 'Sunday', value: 'sunday'}
+  { label: 'Monday', value: 'Monday' },
+  { label: 'Tuesday', value: 'Tuesday' },
+  { label: 'Wednesday', value: 'Wednesday' },
+  { label: 'Thursday', value: 'Thursday' },
+  { label: 'Friday', value: 'Friday' },
+  { label: 'Saturday', value: 'Saturday' },
+  { label: 'Sunday', value: 'Sunday' }
 ]
 
-watch(() => props.showModal, (newVal) => {
-  modalState.value = newVal
+// Computed properties
+const isEditing = computed(() => props.eventIndex !== null)
+const modalTitle = computed(() => isEditing.value ? 'Edit Event' : 'Add New Event')
+
+// Options for dropdowns
+const activityOptions = computed(() => activityStore.getAllActivities)
+const instructorOptions = computed(() => instructorStore.getAllInstructors)
+const locationOptions = computed(() => {
+  return locationStore.getAllLocations.map(location => ({
+    ...location,
+    displayName: `${location.hall} - ${location.address}`
+  }))
 })
 
-// Computed properties
-const modalTitle = computed(() => isEditing ? 'Edit Event' : 'Add New Event')
+// Watchers
+watch(() => props.showModal, (newVal) => {
+  modalState.value = newVal
+  if (newVal && isEditing.value) {
+    populateFormData()
+  }
+})
 
 // Methods
-const formatWeekDays = (days) => {
-  return days.map(day => day.charAt(0).toUpperCase() + day.slice(1)).join(', ')
-}
-
-
-const openEditModal = (index) => {
-  const event = events.value[index]
-  formData.event_name = event.event_name
-  formData.instructor = event.instructor
-  formData.location = event.location
-  formData.color = event.color
-  formData.week_day = [...event.week_day]
-  formData.start_time = event.start_time
-  formData.end_time = event.end_time
-  formData.places = event.places
+const populateFormData = () => {
+  if (props.eventIndex !== null) {
+    const event = eventsStore.getEventByIndex(props.eventIndex)
+    if (event) {
+      formData.activity_id = event.activity_id
+      formData.instructor_id = event.instructor_id
+      formData.location_id = event.location_id
+      formData.color = event.color || '#3B82F6'
+      formData.week_day = event.week_day
+      formData.start_time = event.start_time
+      formData.end_time = event.end_time
+      formData.places = event.places
+    }
+  }
 }
 
 const closeModal = () => {
-  resetForm();
+  resetForm()
   modalState.value = false
-  emit('close');
+  emit('close')
 }
 
-/**
- * Resets the event form to its default values.
- *
- * This function is called when the user either submits the form successfully,
- * or when the user clicks the "Cancel" button to close the modal.
- */
 const resetForm = () => {
-  formData.event_name = ''
-  formData.instructor = ''
-  formData.location = ''
+  formData.activity_id = null
+  formData.instructor_id = null
+  formData.location_id = null
   formData.color = '#3B82F6'
-  formData.week_day = []
-  formData.start_time = ''
-  formData.end_time = ''
+  formData.week_day = ''
+  formData.start_time = null
+  formData.end_time = null
   formData.places = 1
   Object.keys(errors).forEach(key => errors[key] = '')
 }
@@ -234,21 +252,21 @@ const validateForm = () => {
   // Reset errors
   Object.keys(errors).forEach(key => errors[key] = '')
 
-  // Validate event name
-  if (!formData.event_name) {
-    errors.event_name = 'Event name is required'
+  // Validate activity
+  if (!formData.activity_id) {
+    errors.activity_id = 'Activity is required'
     isValid = false
   }
 
   // Validate instructor
-  if (!formData.instructor) {
-    errors.instructor = 'Instructor is required'
+  if (!formData.instructor_id) {
+    errors.instructor_id = 'Instructor is required'
     isValid = false
   }
 
   // Validate location
-  if (!formData.location) {
-    errors.location = 'Location is required'
+  if (!formData.location_id) {
+    errors.location_id = 'Location is required'
     isValid = false
   }
 
@@ -258,9 +276,9 @@ const validateForm = () => {
     isValid = false
   }
 
-  // Validate week days
-  if (formData.week_day.length === 0) {
-    errors.week_day = 'Please select at least one day'
+  // Validate week day
+  if (!formData.week_day) {
+    errors.week_day = 'Please select a day'
     isValid = false
   }
 
@@ -292,23 +310,28 @@ const handleSubmit = () => {
   if (!validateForm()) return
 
   const eventData = {
-    event_name: formData.event_name,
-    instructor: formData.instructor,
-    location: formData.location,
+    activity_id: formData.activity_id,
+    instructor_id: formData.instructor_id,
+    location_id: formData.location_id,
     color: formData.color,
-    week_day: [...formData.week_day],
+    week_day: formData.week_day,
     start_time: formData.start_time,
     end_time: formData.end_time,
     places: formData.places
   }
 
-  if (props.eventIndex !== null) {
-    store.updateEvent(props.eventIndex, eventData);
+  if (isEditing.value) {
+    eventsStore.updateEvent(props.eventIndex, eventData)
   } else {
-    store.addEvent(eventData)
+    eventsStore.addEvent(eventData)
   }
 
   closeModal()
 }
 
+// Initialize stores on mount
+onMounted(() => {
+  // Ensure all stores are populated
+  // You might want to call fetch methods here if needed
+})
 </script>
