@@ -116,7 +116,7 @@
                 size="small"
                 variant="text"
                 color="error"
-                @click="openConfirmDelete(index)"
+                @click="openConfirmDelete(item.activity_id)"
               ></v-btn>
             </template>
           </v-tooltip>
@@ -195,7 +195,7 @@
 
     <DeleteConfirmation
       :show-modal="showDeleteConfirm"
-      :event-index="deleteEventIndex"
+      :activity-id="activityIdForDeleting"
       @close="closeModal()"
     />
 
@@ -234,7 +234,7 @@ const showDeleteConfirm = ref(false)
 const showExceptionsModal = ref(false)
 
 // Modal indices
-const deleteEventIndex = ref(null)
+const activityIdForDeleting = ref(null)
 const editEventIndex = ref(null)
 const exceptionEventIndex = ref(null)
 
@@ -318,9 +318,9 @@ const openEditModal = (index) => {
   editEventIndex.value = index
 }
 
-const openConfirmDelete = (index) => {
+const openConfirmDelete = (activityId) => {
   showDeleteConfirm.value = true
-  deleteEventIndex.value = index
+  activityIdForDeleting.value = activityId
 }
 
 const openManageException = (index) => {
@@ -333,7 +333,7 @@ const closeModal = () => {
   showDeleteConfirm.value = false
   showExceptionsModal.value = false
   editEventIndex.value = null
-  deleteEventIndex.value = null
+  activityIdForDeleting.value = null
   exceptionEventIndex.value = null
 }
 

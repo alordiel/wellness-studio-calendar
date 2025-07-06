@@ -76,13 +76,13 @@ export const useEventsStore = defineStore('events', {
             }
             return false
         },
-        async deleteEvent (index) {
-            if (index >= 0 && index < this.events.length ) {
-                this.events.splice(index, 1)
-                // Here you would typically make an AJAX call to delete from WordPress
-                return true
-            }
-            return false
+        async deleteEvent (activityID) {
+
+            const index = this.events.findIndex( event => event.activity_id === activityID)
+            this.events.splice(index, 1)
+            // Here you would typically make an AJAX call to delete from WordPress
+            return true
+
         }
     }
 

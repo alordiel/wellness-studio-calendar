@@ -30,7 +30,7 @@ import {useEventsStore} from "../../store/event.js";
 
 const store = useEventsStore();
 const emit = defineEmits(['close'])
-const props = defineProps(['eventIndex', 'showModal'])
+const props = defineProps(['activityId', 'showModal'])
 const isDeleting = ref(false);
 const modalState = ref(false);
 
@@ -41,7 +41,7 @@ watch(() => props.showModal, (newVal) => {
 
 const deleteEvent = () => {
   isDeleting.value = true;
-  store.deleteEvent(props.eventIndex)
+  store.deleteEvent(props.activityId)
       .then(() => {
         isDeleting.value = false
       });
