@@ -1,199 +1,169 @@
 <template>
-  <div class="p-6">
+  <v-container>
     <!-- Header with Add Button -->
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Activities Management</h1>
-      <router-link to="/" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</router-link>
-      <button
-        @click="openAddModal"
-        class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
-      >
-        Add New Entry
-      </button>
-    </div>
+    <v-row class="mb-6">
+      <v-col cols="12" md="6">
+        <h1 class="text-h4 font-weight-bold">Activities Management</h1>
+      </v-col>
+      <v-col cols="12" md="6" class="text-right">
+        <v-btn
+          color="primary"
+          @click="openAddModal"
+          prepend-icon="mdi-plus"
+        >
+          Add New Activity
+        </v-btn>
+      </v-col>
+    </v-row>
 
-    <!-- Activities Table -->
-    <div v-if="activities.length > 0" class="overflow-x-auto shadow-md rounded-lg">
-      <table class="w-full bg-white">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity Name</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          <tr v-for="(activity, index) in activities" :key="index" class="hover:bg-gray-50">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ activity.activity_name }}</td>
-            <td class="px-6 py-4 text-sm text-gray-900">
-              <div class="max-w-md">{{ getDescriptionExcerpt(activity.description) }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              <a
-                :href="activity.link"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-blue-600 hover:text-blue-900 underline"
-              >
-                {{ truncateLink(activity.link) }}
-              </a>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button
-                @click="openEditModal(index)"
-                class="text-blue-600 hover:text-blue-900 mr-3"
-              >
-                Edit
-              </button>
-              <button
-                @click="confirmDelete(index)"
-                class="text-red-600 hover:text-red-900"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Activities Data Table -->
+    <v-data-table
+      :headers="headers"
+      :items="activities"
+      :sort-by="[{ key: 'name', order: 'asc' }]"
+      item-key="id"
+      class="elevation-1"
+    >
+      <template v-slot:item.name="{ item }">
+        <div class="d-flex align-center">
+          <v-avatar size="30" class="mr-3" :color="item.color">
+            <v-icon color="white">mdi-fitness</v-icon>
+          </v-avatar>
+          <span class="font-weight-medium">{{ item.name }}</span>
+        </div>
+      </template>
 
-    <!-- No Entries Message -->
-    <div v-else class="text-center py-12 bg-gray-50 rounded-lg">
-      <p class="text-gray-500 text-lg">No activity entries found. Add a new entry to get started.</p>
-    </div>
+      <template v-slot:item.description="{ item }">
+        <div class="text-truncate" style="max-width: 300px;">
+          {{ getDescriptionExcerpt(item.description) }}
+        </div>
+      </template>
 
-    <!-- Modal Dialog -->
-    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
+      <template v-slot:item.color="{ item }">
+        <v-chip :color="item.color" size="small">
+          {{ item.color }}
+        </v-chip>
+      </template>
 
-        <form @submit.prevent="handleSubmit">
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Activity Name</label>
-            <input
-              v-model="formData.activity_name"
-              type="text"
-              maxlength="255"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.activity_name }"
-            />
-            <p v-if="errors.activity_name" class="text-red-500 text-xs mt-1">{{ errors.activity_name }}</p>
-          </div>
+      <template v-slot:item.link="{ item }">
+        <a
+          :href="item.link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-decoration-none"
+        >
+          {{ truncateLink(item.link) }}
+        </a>
+      </template>
 
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-            <textarea
-              v-model="formData.description"
-              rows="4"
-              maxlength="500"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.description }"
-            ></textarea>
-            <p class="text-gray-500 text-xs mt-1">{{ formData.description.length }}/500 characters</p>
-            <p v-if="errors.description" class="text-red-500 text-xs mt-1">{{ errors.description }}</p>
-          </div>
+      <template v-slot:item.actions="{ item }">
+        <v-btn
+          icon="mdi-pencil"
+          size="small"
+          color="blue"
+          variant="text"
+          @click="openEditModal(item)"
+        />
+        <v-btn
+          icon="mdi-delete"
+          size="small"
+          color="red"
+          variant="text"
+          @click="confirmDelete(item)"
+        />
+      </template>
+    </v-data-table>
 
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Link (URL)</label>
-            <input
-              v-model="formData.link"
-              type="url"
-              maxlength="255"
-              required
-              placeholder="https://example.com"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.link }"
-            />
-            <p v-if="errors.link" class="text-red-500 text-xs mt-1">{{ errors.link }}</p>
-          </div>
-
-          <div class="flex justify-end space-x-3">
-            <button
-              type="button"
-              @click="closeModal"
-              class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition duration-200"
-            >
-              {{ isEditing ? 'Update' : 'Add' }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <!-- Edit Activity Modal -->
+    <EditModal
+      v-model:dialog="showModal"
+      :activity="selectedActivity"
+      :is-editing="isEditing"
+      @save="handleSave"
+      @cancel="closeModal"
+    />
 
     <!-- Delete Confirmation Dialog -->
-    <div v-if="showDeleteConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-full max-w-sm">
-        <h2 class="text-xl font-bold mb-4">Confirm Delete</h2>
-        <p class="text-gray-600 mb-6">Are you sure you want to delete this activity?</p>
-        <div class="flex justify-end space-x-3">
-          <button
+    <v-dialog v-model="showDeleteConfirm" max-width="400px">
+      <v-card>
+        <v-card-title class="text-h5">
+          Confirm Delete
+        </v-card-title>
+        <v-card-text>
+          Are you sure you want to delete this activity?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="grey darken-1"
+            variant="text"
             @click="cancelDelete"
-            class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200"
           >
             Cancel
-          </button>
-          <button
+          </v-btn>
+          <v-btn
+            color="red darken-1"
+            variant="text"
             @click="deleteActivity"
-            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-200"
           >
             Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
+import { useActivityStore } from '../store/activity'
+import EditModal from '../components/activities/EditModal.vue'
+
+// Store
+const activityStore = useActivityStore()
 
 // Reactive data
-const activities = ref([
-  // Sample data - remove this when connecting to real data source
-  {
-    activity_name: 'Morning Yoga Session',
-    description: 'Start your day with a refreshing yoga session designed for all skill levels. Our experienced instructors will guide you through breathing exercises and gentle stretches to improve flexibility and mental clarity.',
-    link: 'https://example.com/activities/morning-yoga'
-  },
-  {
-    activity_name: 'Digital Marketing Workshop',
-    description: 'Learn the fundamentals of digital marketing including SEO, social media marketing, and content strategy. This hands-on workshop covers practical techniques you can apply immediately to grow your online presence.',
-    link: 'https://example.com/activities/digital-marketing-workshop'
-  }
-])
-
 const showModal = ref(false)
 const showDeleteConfirm = ref(false)
 const isEditing = ref(false)
-const editingIndex = ref(null)
-const deleteIndex = ref(null)
-
-const formData = reactive({
-  activity_name: '',
-  description: '',
-  link: ''
-})
-
-const errors = reactive({
-  activity_name: '',
-  description: '',
-  link: ''
-})
+const selectedActivity = ref(null)
+const activityToDelete = ref(null)
 
 // Computed properties
-const modalTitle = computed(() => isEditing.value ? 'Edit Activity' : 'Add New Activity')
+const activities = computed(() => activityStore.getAllActivities)
+
+// Data table headers
+const headers = [
+  { 
+    title: 'Activity Name', 
+    key: 'name',
+    sortable: true
+  },
+  { 
+    title: 'Description', 
+    key: 'description',
+    sortable: false
+  },
+  { 
+    title: 'Color', 
+    key: 'color',
+    sortable: false
+  },
+  { 
+    title: 'Link', 
+    key: 'link',
+    sortable: false
+  },
+  { 
+    title: 'Actions', 
+    key: 'actions',
+    sortable: false
+  }
+]
 
 // Methods
 const getDescriptionExcerpt = (description) => {
+  if (!description) return ''
   if (description.length <= 250) {
     return description
   }
@@ -201,6 +171,7 @@ const getDescriptionExcerpt = (description) => {
 }
 
 const truncateLink = (link) => {
+  if (!link) return ''
   if (link.length > 50) {
     return link.substring(0, 47) + '...'
   }
@@ -208,118 +179,55 @@ const truncateLink = (link) => {
 }
 
 const openAddModal = () => {
-  resetForm()
+  selectedActivity.value = null
   isEditing.value = false
-  editingIndex.value = null
   showModal.value = true
 }
 
-const openEditModal = (index) => {
-  const activity = activities.value[index]
-  formData.activity_name = activity.activity_name
-  formData.description = activity.description
-  formData.link = activity.link
+const openEditModal = (activity) => {
+  selectedActivity.value = activity
   isEditing.value = true
-  editingIndex.value = index
   showModal.value = true
 }
 
 const closeModal = () => {
   showModal.value = false
-  resetForm()
+  selectedActivity.value = null
 }
 
-const resetForm = () => {
-  formData.activity_name = ''
-  formData.description = ''
-  formData.link = ''
-  errors.activity_name = ''
-  errors.description = ''
-  errors.link = ''
-}
-
-const validateForm = () => {
-  let isValid = true
-
-  // Reset errors
-  errors.activity_name = ''
-  errors.description = ''
-  errors.link = ''
-
-  // Validate activity name
-  if (!formData.activity_name.trim()) {
-    errors.activity_name = 'Activity name is required'
-    isValid = false
-  } else if (formData.activity_name.length > 255) {
-    errors.activity_name = 'Activity name must be less than 255 characters'
-    isValid = false
-  }
-
-  // Validate description
-  if (!formData.description.trim()) {
-    errors.description = 'Description is required'
-    isValid = false
-  } else if (formData.description.length > 500) {
-    errors.description = 'Description must be less than 500 characters'
-    isValid = false
-  }
-
-  // Validate link
-  if (!formData.link.trim()) {
-    errors.link = 'Link is required'
-    isValid = false
-  } else if (formData.link.length > 255) {
-    errors.link = 'Link must be less than 255 characters'
-    isValid = false
-  } else if (!isValidUrl(formData.link)) {
-    errors.link = 'Please enter a valid URL'
-    isValid = false
-  }
-
-  return isValid
-}
-
-const isValidUrl = (string) => {
+const handleSave = async (activityData) => {
   try {
-    new URL(string)
-    return true
-  } catch (_) {
-    return false
+    if (isEditing.value) {
+      await activityStore.updateActivity(selectedActivity.value.id, activityData)
+    } else {
+      // Generate new ID for new activity
+      activityData.id = Date.now()
+      await activityStore.addActivity(activityData)
+    }
+    closeModal()
+  } catch (error) {
+    console.error('Error saving activity:', error)
   }
 }
 
-const handleSubmit = () => {
-  if (!validateForm()) return
-
-  const activityData = {
-    activity_name: formData.activity_name,
-    description: formData.description,
-    link: formData.link
-  }
-
-  if (isEditing.value) {
-    activities.value[editingIndex.value] = activityData
-  } else {
-    activities.value.push(activityData)
-  }
-
-  closeModal()
-}
-
-const confirmDelete = (index) => {
-  deleteIndex.value = index
+const confirmDelete = (activity) => {
+  activityToDelete.value = activity
   showDeleteConfirm.value = true
 }
 
 const cancelDelete = () => {
-  deleteIndex.value = null
+  activityToDelete.value = null
   showDeleteConfirm.value = false
 }
 
-const deleteActivity = () => {
-  if (deleteIndex.value !== null) {
-    activities.value.splice(deleteIndex.value, 1)
+const deleteActivity = async () => {
+  try {
+    if (activityToDelete.value) {
+      await activityStore.deleteActivity(activityToDelete.value.id)
+    }
+    cancelDelete()
+  } catch (error) {
+    console.error('Error deleting activity:', error)
   }
-  cancelDelete()
 }
 </script>
