@@ -51,12 +51,9 @@ export const useEventsStore = defineStore('events', {
         getAllEvents (state) {
             return [...state.events].sort((a, b) => a.activity_id.localeCompare(b.activity_id));
         },
-        getEventByIndex (state) {
-            return (index) => {
-                if (index >= 0 && index < state.events.length) {
-                    return state.events[index]
-                }
-                return null
+        getEventByEventId (state) {
+            return (eventId) => {
+                return state.events.find((event) => event.id === eventId);
             }
         }
     },

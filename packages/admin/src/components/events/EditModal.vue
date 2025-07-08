@@ -134,7 +134,7 @@ import {useInstructorStore} from "../../store/instructor.js"
 import {useLocationStore} from "../../store/location.js"
 
 const emit = defineEmits(['close'])
-const props = defineProps(['eventIndex', 'showModal'])
+const props = defineProps(['eventId', 'showModal'])
 
 // Stores
 const eventsStore = useEventsStore()
@@ -179,7 +179,7 @@ const weekDays = [
 ]
 
 // Computed properties
-const isEditing = computed(() => props.eventIndex !== null)
+const isEditing = computed(() => props.eventId !== null)
 const modalTitle = computed(() => isEditing.value ? 'Edit Event' : 'Add New Event')
 
 // Options for dropdowns
@@ -202,8 +202,8 @@ watch(() => props.showModal, (newVal) => {
 
 // Methods
 const populateFormData = () => {
-  if (props.eventIndex !== null) {
-    const event = eventsStore.getEventByIndex(props.eventIndex)
+  if (props.eventId !== null) {
+    const event = eventsStore.getEventByEventId(props.eventId)
     if (event) {
       formData.activity_id = event.activity_id
       formData.instructor_id = event.instructor_id
@@ -301,7 +301,7 @@ const handleSubmit = () => {
   }
 
   if (isEditing.value) {
-    eventsStore.updateEvent(props.eventIndex, eventData)
+    eventsStore.updateEvent(props.eventId, eventData)
   } else {
     eventsStore.addEvent(eventData)
   }

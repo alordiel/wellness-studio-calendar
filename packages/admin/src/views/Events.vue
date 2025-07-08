@@ -103,7 +103,7 @@
                 size="small"
                 variant="text"
                 color="primary"
-                @click="openEditModal(index)"
+                @click="openEditModal(item.id)"
               ></v-btn>
             </template>
           </v-tooltip>
@@ -189,7 +189,7 @@
     <!-- Modals -->
     <EditModal
       :show-modal="showEditModal"
-      :event-index="editEventIndex"
+      :event-id="editEventId"
       @close="closeModal()"
     />
 
@@ -235,7 +235,7 @@ const showExceptionsModal = ref(false)
 
 // Modal indices
 const activityIdForDeleting = ref(null)
-const editEventIndex = ref(null)
+const editEventId = ref(null)
 const exceptionEventIndex = ref(null)
 
 // Data table headers
@@ -313,9 +313,9 @@ const getWeekDayColor = (weekDay) => {
 }
 
 // Modal functions
-const openEditModal = (index) => {
+const openEditModal = (eventId) => {
   showEditModal.value = true
-  editEventIndex.value = index
+  editEventId.value = eventId
 }
 
 const openConfirmDelete = (activityId) => {
@@ -332,7 +332,7 @@ const closeModal = () => {
   showEditModal.value = false
   showDeleteConfirm.value = false
   showExceptionsModal.value = false
-  editEventIndex.value = null
+  editEventId.value = null
   activityIdForDeleting.value = null
   exceptionEventIndex.value = null
 }
