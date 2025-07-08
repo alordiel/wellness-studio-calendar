@@ -71,13 +71,11 @@ export const useEventsStore = defineStore('events', {
             return true
         },
 
-        async updateEvent(index, updatedEvent) {
-            console.log('update event', index, updatedEvent)
+        async updateEvent(eventId, updatedEvent) {
+            const index = this.events.findIndex(event => event.id === eventId)
             if (index >= 0 && index < this.events.length) {
-                // Keep the original ID
-                const originalId = this.events[index].id
                 this.events[index] = {
-                    id: originalId,
+                    id: eventId,
                     ...updatedEvent
                 }
                 // Example: await updateEventInWordPress(this.events[index])
@@ -87,8 +85,8 @@ export const useEventsStore = defineStore('events', {
         },
 
         // Alternative method to update by ID (recommended for future use)
-        async updateEventById(id, updatedEvent) {
-            const index = this.events.findIndex(event => event.id === id)
+        async updateEventById(eventId, updatedEvent) {
+
             if (index !== -1) {
                 this.events[index] = {
                     id,
