@@ -28,7 +28,7 @@
     <textarea></textarea>
     <!-- End: Content for Settings tab -->
     <!-- Start: Content for "Coming next" tab -->
-    <p>Planned for some day in the Pro version:</p>
+    <p>Planned for some day in the future Pro version:</p>
     <ul>
       <li>Option for waiting list</li>
       <li>Option to chose the max cancelling hour before the start of the event</li>
