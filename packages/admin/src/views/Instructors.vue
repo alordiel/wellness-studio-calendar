@@ -1,20 +1,16 @@
 <template>
   <v-container>
-    <!-- Header with Add Button -->
-    <v-row class="mb-6">
-      <v-col cols="12" md="6">
-        <h1 class="text-h4 font-weight-bold">Instructor Management</h1>
-      </v-col>
-      <v-col cols="12" md="6" class="text-right">
-        <v-btn
+    <ViewTitle  title="Instructor's Management" />
+
+    <div class="d-flex justify-end">
+      <v-btn
           color="primary"
           @click="openAddModal"
           prepend-icon="mdi-plus"
-        >
-          Add New Instructor
-        </v-btn>
-      </v-col>
-    </v-row>
+      >
+        Add New Instructor
+      </v-btn>
+    </div>
 
     <!-- Instructors Data Table -->
     <v-data-table
@@ -122,6 +118,7 @@
 import { ref, computed } from 'vue'
 import { useInstructorStore } from '../store/instructor'
 import EditInstructor from '../components/instructors/EditInstructor.vue'
+import ViewTitle from "../components/View-title.vue";
 
 // Store
 const instructorStore = useInstructorStore()

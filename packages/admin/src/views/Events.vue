@@ -1,9 +1,8 @@
 <template>
   <v-container fluid>
-    <!-- Header with Add Button -->
-    <h1 class="text-center">Events Management</h1>
-    <div class="d-flex justify-space-between mb-6">
-      <router-link to="/" >← Back to Dashboard</router-link>
+    <ViewTitle  title="Events Management" />
+
+    <div class="d-flex justify-end mb-6">
       <v-btn
           rounded="0"
           min-width="200px"
@@ -217,6 +216,7 @@ import { useEventsStore } from '../store/event.js'
 import { useInstructorStore } from "../store/instructor.js"
 import { useLocationStore } from "../store/location.js"
 import { useActivityStore } from "../store/activity.js"
+import ViewTitle from "../components/View-title.vue";
 
 // Stores
 const eventsStore = useEventsStore()

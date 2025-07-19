@@ -1,28 +1,24 @@
 <template>
   <v-container>
-    <!-- Header with Add Button -->
-    <v-row class="mb-6">
-      <v-col cols="12" md="6">
-        <h1 class="text-h4 font-weight-bold">Location Management</h1>
-      </v-col>
-      <v-col cols="12" md="6" class="text-right">
-        <v-btn
+    <ViewTitle title="Location Management"/>
+
+    <div class="d-flex justify-end mb-6">
+      <v-btn
           color="primary"
           @click="openAddModal"
           prepend-icon="mdi-plus"
-        >
-          Add New Location
-        </v-btn>
-      </v-col>
-    </v-row>
+      >
+        Add New Location
+      </v-btn>
+    </div>
 
     <!-- Locations Data Table -->
     <v-data-table
-      :headers="headers"
-      :items="locations"
-      :sort-by="[{ key: 'hall', order: 'asc' }]"
-      item-key="id"
-      class="elevation-1"
+        :headers="headers"
+        :items="locations"
+        :sort-by="[{ key: 'hall', order: 'asc' }]"
+        item-key="id"
+        class="elevation-1"
     >
       <template v-slot:item.address="{ item }">
         <div class="d-flex align-center">
@@ -46,29 +42,29 @@
 
       <template v-slot:item.actions="{ item }">
         <v-btn
-          icon="mdi-pencil"
-          size="small"
-          color="blue"
-          variant="text"
-          @click="openEditModal(item)"
+            icon="mdi-pencil"
+            size="small"
+            color="blue"
+            variant="text"
+            @click="openEditModal(item)"
         />
         <v-btn
-          icon="mdi-delete"
-          size="small"
-          color="red"
-          variant="text"
-          @click="confirmDelete(item)"
+            icon="mdi-delete"
+            size="small"
+            color="red"
+            variant="text"
+            @click="confirmDelete(item)"
         />
       </template>
     </v-data-table>
 
     <!-- Edit Location Modal -->
     <EditModal
-      v-model:dialog="showModal"
-      :location="selectedLocation"
-      :is-editing="isEditing"
-      @save="handleSave"
-      @cancel="closeModal"
+        v-model:dialog="showModal"
+        :location="selectedLocation"
+        :is-editing="isEditing"
+        @save="handleSave"
+        @cancel="closeModal"
     />
 
     <!-- Delete Confirmation Dialog -->
@@ -81,18 +77,18 @@
           Are you sure you want to delete this location?
         </v-card-text>
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn
-            color="grey darken-1"
-            variant="text"
-            @click="cancelDelete"
+              color="grey darken-1"
+              variant="text"
+              @click="cancelDelete"
           >
             Cancel
           </v-btn>
           <v-btn
-            color="red darken-1"
-            variant="text"
-            @click="deleteLocation"
+              color="red darken-1"
+              variant="text"
+              @click="deleteLocation"
           >
             Delete
           </v-btn>
@@ -103,9 +99,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useLocationStore } from '../store/location'
+import {ref, computed} from 'vue'
+import {useLocationStore} from '../store/location'
 import EditModal from '../components/locations/EditModal.vue'
+import ViewTitle from "../components/View-title.vue";
 
 // Store
 const locationStore = useLocationStore()
@@ -122,23 +119,23 @@ const locations = computed(() => locationStore.getAllLocations)
 
 // Data table headers
 const headers = [
-  { 
-    title: 'Address', 
+  {
+    title: 'Address',
     key: 'address',
     sortable: false
   },
-  { 
-    title: 'Hall Name', 
+  {
+    title: 'Hall Name',
     key: 'hall',
     sortable: true
   },
-  { 
-    title: 'Max Participants', 
+  {
+    title: 'Max Participants',
     key: 'max_participants',
     sortable: false
   },
-  { 
-    title: 'Actions', 
+  {
+    title: 'Actions',
     key: 'actions',
     sortable: false
   }

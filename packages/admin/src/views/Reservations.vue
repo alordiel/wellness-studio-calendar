@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-h4 mb-6">Bookings</h1>
-    <router-link to="/" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</router-link>
+    <ViewTitle  title="Reservations" />
     <v-tabs v-model="activeTab" class="mb-6">
       <v-tab value="reservations">Reservations</v-tab>
       <v-tab value="events-preview">Events Preview</v-tab>
@@ -168,6 +167,7 @@
 <script setup>
 import { ref } from 'vue'
 import Calendar from "../components/Calendar.vue";
+import ViewTitle from "../components/View-title.vue";
 
 // Reactive data
 const activeTab = ref('reservations')

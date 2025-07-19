@@ -1,21 +1,16 @@
 <template>
   <v-container>
+    <ViewTitle  title="Activities Management" />
     <!-- Header with Add Button -->
-    <v-row class="mb-6">
-      <v-col cols="12" md="6">
-        <h1 class="text-h4 font-weight-bold">Activities Management</h1>
-      </v-col>
-      <v-col cols="12" md="6" class="text-right">
-        <v-btn
-          color="primary"
-          @click="openAddModal"
-          prepend-icon="mdi-plus"
-        >
-          Add New Activity
-        </v-btn>
-      </v-col>
-    </v-row>
-
+    <div class="d-flex justify-end">
+      <v-btn
+        color="primary"
+        @click="openAddModal"
+        prepend-icon="mdi-plus"
+      >
+        Add New Activity
+      </v-btn>
+    </div>
     <!-- Activities Data Table -->
     <v-data-table
       :headers="headers"
@@ -118,6 +113,7 @@
 import { ref, computed } from 'vue'
 import { useActivityStore } from '../store/activity'
 import EditModal from '../components/activities/EditModal.vue'
+import ViewTitle from "../components/View-title.vue";
 
 // Store
 const activityStore = useActivityStore()
