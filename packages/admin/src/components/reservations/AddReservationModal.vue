@@ -30,6 +30,14 @@
                   type="email"
                 ></v-text-field>
               </v-col>
+              <v-col cols="12">
+                <v-select>
+                  :item-props="itemProps"
+                  item-value="value
+                  :items="listOfEvents"
+                  label="Select Event"
+                </v-select>
+              </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
                   v-model="formData.phone"
@@ -83,6 +91,7 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
 import { useReservationStore } from '../../store/reservation.js'
+import {useEventsStore} from "../../store/event.js";
 
 const props = defineProps({
   modelValue: {
@@ -94,9 +103,11 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'success', 'cancel'])
 
 const reservationStore = useReservationStore()
+const eventStore = useEventsStore();
 const formRef = ref(null)
 const localDialog = ref(false)
 const isSubmitting = ref(false)
+const listOfEvents = ref(eventStore.getAllEventsAsList());
 
 const formData = reactive({
   user_name: '',
@@ -155,6 +166,13 @@ watch(localDialog, (newVal) => {
     emit('update:modelValue', newVal)
   }
 })
+
+function itemProps (item) {
+    return {
+      title: item.name,
+      subtitle: item.date,
+    }
+  }
 
 const resetForm = () => {
   formData.user_name = ''

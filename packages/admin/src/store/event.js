@@ -1,11 +1,15 @@
-import {defineStore} from 'pinia'
+import {defineStore} from 'pinia';
+import { useActivityStore } from './activity.js';
+import { useInstructorStore } from './instructor.js';
+const instructorStore = useInstructorStore()
+const activityStore = useActivityStore()
 
 export const useEventsStore = defineStore('events', {
     // State
     state: () => ({
         events: [
             {
-                id:1,
+                id: 1,
                 activity_id: 1,
                 instructor_id: 1,
                 location_id: 2,
@@ -15,7 +19,7 @@ export const useEventsStore = defineStore('events', {
                 places: 15
             },
             {
-                id:2,
+                id: 2,
                 activity_id: 1,
                 instructor_id: 3,
                 location_id: 1,
@@ -25,7 +29,7 @@ export const useEventsStore = defineStore('events', {
                 places: 10
             },
             {
-                id:3,
+                id: 3,
                 activity_id: 2,
                 instructor_id: 2,
                 location_id: 2,
@@ -35,7 +39,7 @@ export const useEventsStore = defineStore('events', {
                 places: 12
             },
             {
-                id:4,
+                id: 4,
                 activity_id: 4,
                 instructor_id: 4,
                 location_id: 3,
@@ -48,13 +52,21 @@ export const useEventsStore = defineStore('events', {
     }),
 
     getters: {
-        getAllEvents (state) {
+        getAllEvents(state) {
             return [...state.events].sort((a, b) => a.activity_id.localeCompare(b.activity_id));
         },
         getAllEventsAsList(state) {
-            return state.events.map(event => `${event.activity_id}  by ${event.instructor_id} on ${event.week_day } from ${event.start_time}  to ${event.end_time} ` );
+            return state.events.map(event => {
+                const instructor = instructorStore.getInstructorById(event.instructor_id);
+                const activity = activityStore.getActivityById(event.activity_id);
+                return {
+                    name: `${activity.name}  by ${instructor.name}`,
+                    date: `on ${event.week_day} from ${event.start_time}  to ${event.end_time}`,
+                    value: event.id,
+                }
+            });
         },
-        getEventByEventId (state) {
+        getEventByEventId(state) {
             return (eventId) => {
                 return state.events.find((event) => event.id === eventId);
             }
@@ -86,24 +98,9 @@ export const useEventsStore = defineStore('events', {
             }
             return false
         },
+        async deleteEvent(activityID) {
 
-        // Alternative method to update by ID (recommended for future use)
-        async updateEventById(eventId, updatedEvent) {
-
-            if (index !== -1) {
-                this.events[index] = {
-                    id,
-                    ...updatedEvent
-                }
-                // Example: await updateEventInWordPress(this.events[index])
-                return true
-            }
-            return false
-        },
-
-         async deleteEvent (activityID) {
-
-            const index = this.events.findIndex( event => event.activity_id === activityID)
+            const index = this.events.findIndex(event => event.activity_id === activityID)
             this.events.splice(index, 1)
             // Here you would typically make an AJAX call to delete from WordPress
             return true

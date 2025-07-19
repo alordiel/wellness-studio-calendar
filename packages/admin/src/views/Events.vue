@@ -207,7 +207,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watchEffect} from 'vue'
+import {computed, ref} from 'vue'
 import { storeToRefs } from 'pinia'
 import DeleteConfirmation from "../components/events/DeleteConfirmation.vue"
 import ExceptionsModal from "../components/events/ExceptionsModal.vue"
