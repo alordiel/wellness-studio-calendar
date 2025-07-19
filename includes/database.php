@@ -75,9 +75,16 @@ function wsc_create_database_tables() {
         `cancellation_hash` varchar(255) NOT NULL,
         `cancel_before` tinyint(1) NOT NULL,
         `cancelled_by` varchar(16) NULL,
-        `user_notes` varchar(500) NOT NULL,
-        `admin_notes` varchar(500) NOT NULL,
-        
+        `created_at` datetime NOT NULL,`
+        PRIMARY KEY (`ID`)
+    ) $charset_collate;";
+
+	$sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_reservation_notes` (
+        `ID` int(4) AUTO_INCREMENT NOT NULL UNIQUE,
+        `reservation_id` int(16) NOT NULL,
+        `note_type` varchar(10) NOT NULL,
+        `note` varchar(500) NOT NULL,
+        `created_at` datetime NOT NULL,`
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 

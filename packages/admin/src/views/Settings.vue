@@ -13,6 +13,7 @@
       <!-- Settings Tab -->
       <v-tabs-window-item value="settings">
         <v-card class="pa-6">
+          <div>Payment methods: add and remove payment methods</div>
           <h2 class="text-h5 mb-4">Captcha</h2>
           <p class="text-body-1 mb-4">
             Allowing captcha will reduce the chance of bots registering for your events
@@ -24,6 +25,7 @@
             color="primary"
             class="mb-4"
           ></v-checkbox>
+
 
           <v-expand-transition>
             <div v-show="settings.captcha.enabled">
