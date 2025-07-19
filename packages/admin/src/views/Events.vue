@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <ViewTitle  title="Events Management" />
 
     <div class="d-flex justify-end mb-6">

@@ -1,6 +1,17 @@
 <template>
   <v-container>
-    <ViewTitle  title="Reservations" />
+    <ViewTitle title="Reservations"/>
+
+    <div class="d-flex justify-end" v-show="activeTab === 'reservations'">
+      <v-btn
+          color="primary"
+          @click="openNewReservation = true"
+          prepend-icon="mdi-plus"
+      >
+        Add Reservation
+      </v-btn>
+    </div>
+
     <v-tabs v-model="activeTab" class="mb-6">
       <v-tab value="reservations">Reservations</v-tab>
       <v-tab value="events-preview">Events Preview</v-tab>
@@ -9,28 +20,30 @@
     <v-tabs-window v-model="activeTab">
       <v-tabs-window-item value="reservations">
         <!-- Reservations Data Table -->
-        <v-data-table
-          :headers="headers"
-          :items="reservations"
-          :sort-by="[{ key: 'eventName', order: 'asc' }]"
-          class="elevation-1"
-        >
-          <template v-slot:item.actions="{ item }">
-            <v-btn
-              icon="mdi-eye"
-              size="small"
-              variant="text"
-              @click="viewReservation(item)"
-            ></v-btn>
-            <v-btn
-              icon="mdi-delete"
-              size="small"
-              variant="text"
-              color="error"
-              @click="confirmDelete(item)"
-            ></v-btn>
-          </template>
-        </v-data-table>
+        <v-sheet border rounded>
+          <v-data-table
+              :headers="headers"
+              :items="reservations"
+              :sort-by="[{ key: 'eventName', order: 'asc' }]"
+              class="elevation-1"
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-btn
+                  icon="mdi-eye"
+                  size="small"
+                  variant="text"
+                  @click="viewReservation(item)"
+              ></v-btn>
+              <v-btn
+                  icon="mdi-delete"
+                  size="small"
+                  variant="text"
+                  color="error"
+                  @click="confirmDelete(item)"
+              ></v-btn>
+            </template>
+          </v-data-table>
+        </v-sheet>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="events-preview">
@@ -42,7 +55,7 @@
     </v-tabs-window>
 
     <!-- View Reservation Modal -->
-    <v-dialog v-model="viewDialog" max-width="600px">
+    <v-dialog v-model="openManageReservation" max-width="600px">
       <v-card>
         <v-card-title>
           <span class="text-h5">Reservation Details</span>
@@ -52,69 +65,69 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="User Name"
-                  :model-value="selectedReservation?.userName"
-                  readonly
-                  variant="outlined"
+                    label="User Name"
+                    :model-value="selectedReservation?.userName"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="Event Name"
-                  :model-value="selectedReservation?.eventName"
-                  readonly
-                  variant="outlined"
+                    label="Event Name"
+                    :model-value="selectedReservation?.eventName"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="Reservation Date"
-                  :model-value="formatDate(selectedReservation?.dateTimeReservation)"
-                  readonly
-                  variant="outlined"
+                    label="Reservation Date"
+                    :model-value="formatDate(selectedReservation?.dateTimeReservation)"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="Creation Date"
-                  :model-value="formatDate(selectedReservation?.dateCreation)"
-                  readonly
-                  variant="outlined"
+                    label="Creation Date"
+                    :model-value="formatDate(selectedReservation?.dateCreation)"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="User Email"
-                  :model-value="selectedReservation?.userEmail"
-                  readonly
-                  variant="outlined"
+                    label="User Email"
+                    :model-value="selectedReservation?.userEmail"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  label="User Phone"
-                  :model-value="selectedReservation?.userPhone"
-                  readonly
-                  variant="outlined"
+                    label="User Phone"
+                    :model-value="selectedReservation?.userPhone"
+                    readonly
+                    variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-textarea
-                  label="User Notes"
-                  :model-value="selectedReservation?.userNotes"
-                  readonly
-                  variant="outlined"
-                  rows="2"
+                    label="User Notes"
+                    :model-value="selectedReservation?.userNotes"
+                    readonly
+                    variant="outlined"
+                    rows="2"
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
                 <h4 class="mb-2">Admin Notes</h4>
                 <div v-if="selectedReservation?.adminNotes?.length" class="mb-4">
                   <v-card
-                    v-for="(note, index) in selectedReservation.adminNotes"
-                    :key="index"
-                    class="mb-2"
-                    variant="outlined"
+                      v-for="(note, index) in selectedReservation.adminNotes"
+                      :key="index"
+                      class="mb-2"
+                      variant="outlined"
                   >
                     <v-card-text>
                       <div class="d-flex justify-space-between mb-1">
@@ -126,11 +139,11 @@
                   </v-card>
                 </div>
                 <v-textarea
-                  v-model="newAdminNote"
-                  label="Add Admin Note"
-                  variant="outlined"
-                  rows="3"
-                  placeholder="Enter your note here..."
+                    v-model="newAdminNote"
+                    label="Add Admin Note"
+                    variant="outlined"
+                    rows="3"
+                    placeholder="Enter your note here..."
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -141,7 +154,7 @@
             Cancel Reservation
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="grey" @click="viewDialog = false">Close</v-btn>
+          <v-btn color="grey" @click="openManageReservation = false">Close</v-btn>
           <v-btn color="primary" @click="saveAdminNote">Save Note</v-btn>
         </v-card-actions>
       </v-card>
@@ -165,13 +178,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import Calendar from "../components/Calendar.vue";
 import ViewTitle from "../components/View-title.vue";
 
 // Reactive data
 const activeTab = ref('reservations')
-const viewDialog = ref(false)
+const openManageReservation = ref(false)
+const openNewReservation = ref(false)
 const deleteDialog = ref(false)
 const selectedReservation = ref(null)
 const newAdminNote = ref('')
@@ -233,15 +247,15 @@ const reservations = ref([
 
 // Table headers
 const headers = [
-  { title: 'Event Name', key: 'eventName', sortable: true },
+  {title: 'Event Name', key: 'eventName', sortable: true},
   {
     title: 'Date & Time Reservation',
     key: 'dateTimeReservation',
     sortable: true,
     value: (item) => formatDate(item.dateTimeReservation)
   },
-  { title: 'User Name', key: 'userName', sortable: false },
-  { title: 'Actions', key: 'actions', sortable: false }
+  {title: 'User Name', key: 'userName', sortable: false},
+  {title: 'Actions', key: 'actions', sortable: false}
 ]
 
 // Methods
@@ -258,8 +272,8 @@ const formatDate = (dateString) => {
 }
 
 const viewReservation = (item) => {
-  selectedReservation.value = { ...item }
-  viewDialog.value = true
+  selectedReservation.value = {...item}
+  openManageReservation.value = true
 }
 
 const confirmDelete = (item) => {
@@ -274,7 +288,7 @@ const deleteReservation = () => {
     reservations.value.splice(index, 1)
   }
   deleteDialog.value = false
-  viewDialog.value = false
+  openManageReservation.value = false
   reservationToDelete.value = null
 }
 
@@ -296,7 +310,7 @@ const saveAdminNote = () => {
   // Update the original reservation in the list
   const index = reservations.value.findIndex(r => r.id === selectedReservation.value.id)
   if (index > -1) {
-    reservations.value[index] = { ...selectedReservation.value }
+    reservations.value[index] = {...selectedReservation.value}
   }
 
   newAdminNote.value = ''

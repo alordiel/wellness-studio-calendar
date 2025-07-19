@@ -120,6 +120,16 @@
                 Option to show more than a week of activities
               </v-list-item-title>
             </v-list-item>
+
+            <v-list-item class="px-0">
+              <template v-slot:prepend>
+                <v-icon color="primary">mdi-calendar-multiple</v-icon>
+              </template>
+              <v-list-item-title>
+                Functional calendar with showing the activities per date/time and location<br>
+                <small>check also if adding a new event doesn't overlap with old one in space and time</small>
+              </v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-card>
       </v-tabs-window-item>
