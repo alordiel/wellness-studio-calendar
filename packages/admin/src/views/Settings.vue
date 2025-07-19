@@ -13,7 +13,11 @@
     <label for="captcha">
       <input type="checkbox" name="captcha" id="captcha"/> Add hCaptcha
     </label>
-    <div class="hidden-hcaptcha-api-key"></div>
+    <div class="hidden-hcaptcha-api-key">
+      <label for="hcaptcha-site-key">
+        <input type="text" name="hcaptcha-site-key" value="1b18ff62-eba2-4f8e-bda8-a6465ce28da8">
+      </label>
+    </div>
     <small>You can get your free hCaptcha key following these instructions <a href="https://captcha4wp.com/docs/how-to-get-hcaptcha-keys/" target="_blank">here</a></small>
     <!-- End: Content for Settings tab -->
     <!-- Start: Content for Email tab -->
