@@ -51,6 +51,9 @@ export const useEventsStore = defineStore('events', {
         getAllEvents (state) {
             return [...state.events].sort((a, b) => a.activity_id.localeCompare(b.activity_id));
         },
+        getAllEventsAsList(state) {
+            return state.events.map(event => `${event.activity_id}  by ${event.instructor_id} on ${event.week_day } from ${event.start_time}  to ${event.end_time} ` );
+        },
         getEventByEventId (state) {
             return (eventId) => {
                 return state.events.find((event) => event.id === eventId);

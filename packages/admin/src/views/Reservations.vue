@@ -1,17 +1,9 @@
 <template>
   <v-container>
-    <ViewTitle title="Reservations"/>
+    <h1 class="text-h4 mb-6">Bookings</h1>
+    <router-link to="/" class="text-blue-600 hover:text-blue-800">← Back to Dashboard</router-link>
 
-    <div class="d-flex justify-end" v-show="activeTab === 'reservations'">
-      <v-btn
-          color="primary"
-          @click="openNewReservation = true"
-          prepend-icon="mdi-plus"
-      >
-        Add Reservation
-      </v-btn>
-    </div>
-
+    <!-- Add New Reservation Button -->
     <v-tabs v-model="activeTab" class="mb-6">
       <v-tab value="reservations">Reservations</v-tab>
       <v-tab value="events-preview">Events Preview</v-tab>
@@ -19,6 +11,17 @@
 
     <v-tabs-window v-model="activeTab">
       <v-tabs-window-item value="reservations">
+        <v-row class="mb-6">
+          <v-col cols="12" class="text-right">
+            <v-btn
+                color="primary"
+                prepend-icon="mdi-plus"
+                @click="openNewReservation = true"
+            >
+              Add New Reservation
+            </v-btn>
+          </v-col>
+        </v-row>
         <!-- Reservations Data Table -->
         <v-sheet border rounded>
           <v-data-table
@@ -54,141 +57,43 @@
       </v-tabs-window-item>
     </v-tabs-window>
 
-    <!-- View Reservation Modal -->
-    <v-dialog v-model="openManageReservation" max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">Reservation Details</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="User Name"
-                    :model-value="selectedReservation?.userName"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="Event Name"
-                    :model-value="selectedReservation?.eventName"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="Reservation Date"
-                    :model-value="formatDate(selectedReservation?.dateTimeReservation)"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="Creation Date"
-                    :model-value="formatDate(selectedReservation?.dateCreation)"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="User Email"
-                    :model-value="selectedReservation?.userEmail"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                    label="User Phone"
-                    :model-value="selectedReservation?.userPhone"
-                    readonly
-                    variant="outlined"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                    label="User Notes"
-                    :model-value="selectedReservation?.userNotes"
-                    readonly
-                    variant="outlined"
-                    rows="2"
-                ></v-textarea>
-              </v-col>
-              <v-col cols="12">
-                <h4 class="mb-2">Admin Notes</h4>
-                <div v-if="selectedReservation?.adminNotes?.length" class="mb-4">
-                  <v-card
-                      v-for="(note, index) in selectedReservation.adminNotes"
-                      :key="index"
-                      class="mb-2"
-                      variant="outlined"
-                  >
-                    <v-card-text>
-                      <div class="d-flex justify-space-between mb-1">
-                        <span class="font-weight-medium">{{ note.adminName }}</span>
-                        <span class="text-caption">{{ formatDate(note.date) }}</span>
-                      </div>
-                      <p class="mb-0">{{ note.content }}</p>
-                    </v-card-text>
-                  </v-card>
-                </div>
-                <v-textarea
-                    v-model="newAdminNote"
-                    label="Add Admin Note"
-                    variant="outlined"
-                    rows="3"
-                    placeholder="Enter your note here..."
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="error" @click="confirmDelete(selectedReservation)">
-            Cancel Reservation
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" @click="openManageReservation = false">Close</v-btn>
-          <v-btn color="primary" @click="saveAdminNote">Save Note</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!-- Modal Components -->
+    <ViewReservationModal
+        v-model="openManageReservation"
+        :reservation="selectedReservation"
+        @delete="handleDeleteFromView"
+        @saveNote="handleSaveNote"
+        @close="closeViewModal"
+    />
 
-    <!-- Delete Confirmation Modal -->
-    <v-dialog v-model="deleteDialog" max-width="400px">
-      <v-card>
-        <v-card-title class="text-h5">Confirm Cancellation</v-card-title>
-        <v-card-text>
-          Are you sure you want to cancel this reservation? An email notification will be sent to the user.
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" @click="deleteDialog = false">Cancel</v-btn>
-          <v-btn color="error" @click="deleteReservation">Confirm</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <DeleteReservationModal
+        v-model="deleteDialog"
+        :reservation="reservationToDelete"
+        @confirm="handleDeleteConfirm"
+        @cancel="closeDeleteModal"
+    />
+
+    <AddReservationModal
+        v-model="openNewReservation"
+        @success="handleAddSuccess"
+        @cancel="closeAddModal"
+    />
   </v-container>
 </template>
 
 <script setup>
 import {ref} from 'vue'
-import Calendar from "../components/Calendar.vue";
-import ViewTitle from "../components/View-title.vue";
+import Calendar from "../components/reservations/Calendar.vue"
+import ViewReservationModal from "../components/reservations/ViewReservationModal.vue"
+import DeleteReservationModal from "../components/reservations/DeleteReservationModal.vue"
+import AddReservationModal from "../components/reservations/AddReservationModal.vue"
 
 // Reactive data
 const activeTab = ref('reservations')
 const openManageReservation = ref(false)
-const openNewReservation = ref(false)
 const deleteDialog = ref(false)
+const openNewReservation = ref(false)
 const selectedReservation = ref(null)
-const newAdminNote = ref('')
 const reservationToDelete = ref(null)
 
 // Mock data
@@ -200,13 +105,13 @@ const reservations = ref([
     userName: 'John Doe',
     userEmail: 'john.doe@example.com',
     userPhone: '+1234567890',
-    userNotes: 'First time attending, excited!',
+    userNotes: 'First time attending, excited! Please arrive 10 minutes early.',
     dateCreation: '2024-11-10T14:30:00',
     adminNotes: [
       {
-        date: '2024-11-11T10:00:00',
-        adminName: 'Admin User',
-        content: 'Welcome to our yoga class! Please arrive 10 minutes early.'
+        date: '2024-11-11T09:00:00',
+        adminName: 'Sarah Admin',
+        content: 'New member, offered intro package. Please arrive 10 minutes early.'
       }
     ]
   },
@@ -281,42 +186,75 @@ const confirmDelete = (item) => {
   deleteDialog.value = true
 }
 
-const deleteReservation = () => {
+const handleDeleteFromView = (reservation) => {
+  reservationToDelete.value = reservation
+  openManageReservation.value = false
+  deleteDialog.value = true
+}
+
+const handleDeleteConfirm = (reservation) => {
   // In real app, this would call an API
-  const index = reservations.value.findIndex(r => r.id === reservationToDelete.value.id)
+  const index = reservations.value.findIndex(r => r.id === reservation.id)
   if (index > -1) {
     reservations.value.splice(index, 1)
   }
   deleteDialog.value = false
-  openManageReservation.value = false
   reservationToDelete.value = null
 }
 
-const saveAdminNote = () => {
-  if (!newAdminNote.value.trim()) return
-
-  const note = {
-    date: new Date().toISOString(),
-    adminName: 'Current Admin', // In real app, get from user session
-    content: newAdminNote.value
-  }
-
+const handleSaveNote = ({reservation, note}) => {
   // Add note to selected reservation
-  if (!selectedReservation.value.adminNotes) {
-    selectedReservation.value.adminNotes = []
+  if (!reservation.adminNotes) {
+    reservation.adminNotes = []
   }
-  selectedReservation.value.adminNotes.push(note)
+  reservation.adminNotes.push(note)
 
   // Update the original reservation in the list
-  const index = reservations.value.findIndex(r => r.id === selectedReservation.value.id)
+  const index = reservations.value.findIndex(r => r.id === reservation.id)
   if (index > -1) {
-    reservations.value[index] = {...selectedReservation.value}
+    reservations.value[index] = {...reservation}
   }
 
-  newAdminNote.value = ''
+  // Update selectedReservation to reflect the change
+  selectedReservation.value = {...reservation}
+}
+
+const handleAddSuccess = (newReservation) => {
+  // Add the new reservation to the list (in real app, this would be handled by the store)
+  const reservationForTable = {
+    id: newReservation.id,
+    eventName: 'Manual Reservation', // In real app, this would be from selected event
+    dateTimeReservation: newReservation.dateTimeReservation,
+    userName: newReservation.user_name,
+    userEmail: newReservation.email,
+    userPhone: newReservation.phone,
+    userNotes: newReservation.user_notes || '',
+    dateCreation: newReservation.dateCreation,
+    adminNotes: newReservation.admin_notes ? [
+      {
+        date: newReservation.dateCreation,
+        adminName: 'Current Admin',
+        content: newReservation.admin_notes
+      }
+    ] : []
+  }
+
+  reservations.value.push(reservationForTable)
+  console.log('New reservation added:', newReservation)
+}
+
+// Modal close handlers
+const closeViewModal = () => {
+  openManageReservation.value = false
+  selectedReservation.value = null
+}
+
+const closeDeleteModal = () => {
+  deleteDialog.value = false
+  reservationToDelete.value = null
+}
+
+const closeAddModal = () => {
+  openNewReservation.value = false
 }
 </script>
-
-<style scoped>
-/* Add any custom styles here */
-</style>
