@@ -10,63 +10,69 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="formData.user_name"
-                  label="User Name"
-                  required
-                  :rules="nameRules"
-                  variant="outlined"
-                  :error-messages="errors.user_name"
-                  maxlength="255"
+                    v-model="formData.user_name"
+                    label="Full Name"
+                    required
+                    :rules="nameRules"
+                    variant="outlined"
+                    :error-messages="errors.user_name"
+                    maxlength="255"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="formData.email"
-                  label="Email"
-                  required
-                  :rules="emailRules"
-                  variant="outlined"
-                  :error-messages="errors.email"
-                  type="email"
+                    v-model="formData.email"
+                    label="Email"
+                    required
+                    :rules="emailRules"
+                    variant="outlined"
+                    :error-messages="errors.email"
+                    type="email"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-select>
+                <v-select
+                  item-value="value"
                   :item-props="itemProps"
-                  item-value="value
                   :items="listOfEvents"
                   label="Select Event"
+                >
+                  <template v-slot:item="{ props: itemProps, item }">
+                    <v-list-item
+                        v-bind="itemProps"
+                        :subtitle="item.raw.date"
+                    ></v-list-item>
+                  </template>
                 </v-select>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="formData.phone"
-                  label="Phone"
-                  required
-                  :rules="phoneRules"
-                  variant="outlined"
-                  :error-messages="errors.phone"
+                    v-model="formData.phone"
+                    label="Phone"
+                    :rules="phoneRules"
+                    variant="outlined"
+                    :error-messages="errors.phone"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  v-model="formData.payment_method"
-                  label="Payment Method"
-                  :items="paymentMethods"
-                  required
-                  :rules="paymentRules"
-                  variant="outlined"
-                  :error-messages="errors.payment_method"
+                    v-model="formData.payment_method"
+                    label="Payment Method"
+                    :items="paymentMethods"
+                    required
+                    :rules="paymentRules"
+                    variant="outlined"
+                    :error-messages="errors.payment_method"
                 ></v-select>
               </v-col>
               <v-col cols="12">
                 <v-textarea
-                  v-model="formData.admin_notes"
-                  label="Admin Notes"
-                  variant="outlined"
-                  rows="3"
-                  placeholder="Enter any admin notes for this reservation..."
-                  :error-messages="errors.admin_notes"
+                    v-model="formData.admin_notes"
+                    label="Admin Notes"
+                    variant="outlined"
+                    rows="3"
+                    placeholder="Enter any admin notes for this reservation..."
+                    :error-messages="errors.admin_notes"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -77,9 +83,9 @@
         <v-spacer></v-spacer>
         <v-btn color="grey" @click="handleCancel">Cancel</v-btn>
         <v-btn
-          color="primary"
-          @click="handleSubmit"
-          :loading="isSubmitting"
+            color="primary"
+            @click="handleSubmit"
+            :loading="isSubmitting"
         >
           Add Reservation
         </v-btn>
@@ -89,9 +95,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
-import { useReservationStore } from '../../store/reservation.js'
+import {ref, reactive, watch, onMounted} from 'vue'
+import {useReservationStore} from '../../store/reservation.js'
 import {useEventsStore} from "../../store/event.js";
+import {useInstructorStore} from "../../store/instructor.js";
+import {useActivityStore} from "../../store/activity.js";
+import {storeToRefs} from "pinia";
+
+const instructorStore = useInstructorStore()
+const activityStore = useActivityStore()
 
 const props = defineProps({
   modelValue: {
@@ -101,13 +113,13 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue', 'success', 'cancel'])
-
 const reservationStore = useReservationStore()
-const eventStore = useEventsStore();
+const eventsStore = useEventsStore();
+const { events } = storeToRefs(eventsStore);
 const formRef = ref(null)
 const localDialog = ref(false)
 const isSubmitting = ref(false)
-const listOfEvents = ref(eventStore.getAllEventsAsList());
+const listOfEvents = ref([]);
 
 const formData = reactive({
   user_name: '',
@@ -126,10 +138,10 @@ const errors = reactive({
 })
 
 const paymentMethods = [
-  { title: 'Card Payment', value: 'card payment' },
-  { title: 'Cash', value: 'cash' },
-  { title: 'Club Card', value: 'club card' },
-  { title: 'Multisport Card', value: 'multisport card' }
+  {title: 'Card Payment', value: 'card payment'},
+  {title: 'Cash', value: 'cash'},
+  {title: 'Club Card', value: 'club card'},
+  {title: 'Multisport Card', value: 'multisport card'}
 ]
 
 // Validation rules
@@ -151,7 +163,9 @@ const phoneRules = [
 const paymentRules = [
   v => !!v || 'Payment method is required'
 ]
-
+onMounted(() => {
+  getAllEventsAsList();
+})
 // Watch for changes to the prop and update local state
 watch(() => props.modelValue, (newVal) => {
   localDialog.value = newVal
@@ -167,12 +181,24 @@ watch(localDialog, (newVal) => {
   }
 })
 
-function itemProps (item) {
+function getAllEventsAsList() {
+  listOfEvents.value = events.value.map(event => {
+    const instructor = instructorStore.getInstructorById(event.instructor_id);
+    const activity = activityStore.getActivityById(event.activity_id);
     return {
-      title: item.name,
-      subtitle: item.date,
+      name: `${activity.name} with ${instructor.name}`,
+      date: `on ${event.week_day} from ${event.start_time} to ${event.end_time}`,
+      value: event.id,
     }
+  });
+}
+
+function itemProps(item) {
+  return {
+    title: item.name,
+    subtitle: item.date,
   }
+}
 
 const resetForm = () => {
   formData.user_name = ''
@@ -195,7 +221,7 @@ const resetForm = () => {
 const validateForm = async () => {
   if (!formRef.value) return false
 
-  const { valid } = await formRef.value.validate()
+  const {valid} = await formRef.value.validate()
   return valid
 }
 
@@ -209,8 +235,8 @@ const handleSubmit = async () => {
     // Generate new ID
     const existingReservations = reservationStore.getAllReservations
     const newId = existingReservations.length > 0
-      ? Math.max(...existingReservations.map(r => r.id)) + 1
-      : 1
+        ? Math.max(...existingReservations.map(r => r.id)) + 1
+        : 1
 
     // Create new reservation object
     const newReservation = {

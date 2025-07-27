@@ -1,8 +1,4 @@
 import {defineStore} from 'pinia';
-import { useActivityStore } from './activity.js';
-import { useInstructorStore } from './instructor.js';
-const instructorStore = useInstructorStore()
-const activityStore = useActivityStore()
 
 export const useEventsStore = defineStore('events', {
     // State
@@ -53,19 +49,9 @@ export const useEventsStore = defineStore('events', {
 
     getters: {
         getAllEvents(state) {
-            return [...state.events].sort((a, b) => a.activity_id.localeCompare(b.activity_id));
+            return [...state.events].sort((a, b) =>  a.activity_id.localeCompare(b.activity_id));
         },
-        getAllEventsAsList(state) {
-            return state.events.map(event => {
-                const instructor = instructorStore.getInstructorById(event.instructor_id);
-                const activity = activityStore.getActivityById(event.activity_id);
-                return {
-                    name: `${activity.name}  by ${instructor.name}`,
-                    date: `on ${event.week_day} from ${event.start_time}  to ${event.end_time}`,
-                    value: event.id,
-                }
-            });
-        },
+
         getEventByEventId(state) {
             return (eventId) => {
                 return state.events.find((event) => event.id === eventId);
