@@ -84,6 +84,7 @@ function wsc_create_database_tables() {
         `reservation_id` int(16) NOT NULL,
         `note_type` varchar(10) NOT NULL,
         `note` varchar(500) NOT NULL,
+        `author_id` int(16) NOT NULL,
         `created_at` datetime NOT NULL,`
         PRIMARY KEY (`ID`)
     ) $charset_collate;";

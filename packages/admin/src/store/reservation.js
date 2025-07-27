@@ -13,8 +13,8 @@ export const useReservationStore = defineStore('reservations', {
                 payment_method: 'credit_card',
                 cancelled_by: null,
                 user_notes: 'I have some lower back issues, please advise.',
-                admin_notes: 'First-time participant, offer intro package.',
-                created_at: '2024-12-23'
+                created_at: '2024-12-23',
+                admin_notes: [{author: 'Semana',created_at: '14:22:00 23-01-2999', content: 'First-time participant, offer intro package.'}],
             },
             {
                 id: 2,
@@ -25,8 +25,8 @@ export const useReservationStore = defineStore('reservations', {
                 payment_method: 'paypal',
                 cancelled_by: null,
                 user_notes: '',
-                admin_notes: 'Regular attendee, membership expires in 2 weeks.',
-                created_at: '2024-12-23'
+                created_at: '2024-12-23',
+                admin_notes: [{author: 'Semana',created_at: '14:22:00 23-01-2999', content: 'Regular attendee, membership expires in 2 weeks.'}],
             },
             {
                 id: 3,
@@ -37,8 +37,8 @@ export const useReservationStore = defineStore('reservations', {
                 payment_method: 'cash',
                 cancelled_by: 'user',
                 user_notes: 'May be 5 minutes late.',
-                admin_notes: '',
-                created_at: '2024-12-23'
+                created_at: '2024-12-23',
+                admin_notes: [{author: 'Semana',created_at: '14:22:00 23-01-2999', content: ''}],
             },
             {
                 id: 4,
@@ -49,8 +49,8 @@ export const useReservationStore = defineStore('reservations', {
                 payment_method: 'credit_card',
                 cancelled_by: null,
                 user_notes: '',
-                admin_notes: 'New member discount applied.',
-                created_at: '2024-12-23'
+                created_at: '2024-12-23',
+                admin_notes: [{author: 'Semana',created_at: '14:22:00 23-01-2999', content: 'New member discount applied.'}],
             }
         ]
     }),

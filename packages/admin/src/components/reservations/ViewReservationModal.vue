@@ -55,11 +55,11 @@
                 </div>
               </div>
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" v-if="reservation?.userNotes ">
               <div class="mb-4">
                 <v-label class="text-body-2 font-weight-medium mb-1">User Notes</v-label>
                 <div class="text-body-1 pa-3 bg-grey-lighten-5 rounded" style="min-height: 60px;">
-                  {{ reservation?.userNotes || 'No notes provided' }}
+                  {{ reservation.userNotes  }}
                 </div>
               </div>
             </v-col>
@@ -74,8 +74,8 @@
                 >
                   <v-card-text>
                     <div class="d-flex justify-space-between mb-1">
-                      <span class="font-weight-medium">{{ note.adminName }}</span>
-                      <span class="text-caption">{{ formatDate(note.date) }}</span>
+                      <span class="font-weight-medium">by <strong>{{ note.author }}</strong></span>
+                      <span class="text-caption">{{ note.created_at }}</span>
                     </div>
                     <p class="mb-0">{{ note.content }}</p>
                   </v-card-text>

@@ -89,21 +89,19 @@ import DeleteReservationModal from "../components/reservations/DeleteReservation
 import AddReservationModal from "../components/reservations/AddReservationModal.vue"
 import {useReservationStore} from '../store/reservation.js'
 import {useEventsStore} from "../store/event.js";
-import {useInstructorStore} from "../store/instructor.js";
 import {useActivityStore} from "../store/activity.js";
 import {storeToRefs} from "pinia";
 
 // Reactive data
-const activeTab = ref('reservations')
-const openManageReservation = ref(false)
-const deleteDialog = ref(false)
-const openNewReservation = ref(false)
-const selectedReservation = ref(null)
-const reservationToDelete = ref(null)
+const activeTab = ref('reservations');
+const openManageReservation = ref(false);
+const deleteDialog = ref(false);
+const openNewReservation = ref(false);
+const selectedReservation = ref(null);
+const reservationToDelete = ref(null);
 const reservationStore = useReservationStore();
-const instructorStore = useInstructorStore()
-const activityStore = useActivityStore()
-const eventStore = useEventsStore()
+const activityStore = useActivityStore();
+const eventStore = useEventsStore();
 const {reservations} = storeToRefs(reservationStore);
 
 // Table headers
@@ -113,11 +111,11 @@ const headers = [
     title: 'Date & Time Reservation',
     key: 'dateTimeReservation',
     sortable: true,
-    value: (item) => formatDate(item.dateTimeReservation)
+    value: (item) => formatDate(item.dateTimeReservation),
   },
-  {title: 'User Name', key: 'userName', sortable: false},
-  {title: 'Actions', key: 'actions', sortable: false}
-]
+  {title: 'User Name', key: 'userName', sortable: false,},
+  {title: 'Actions', key: 'actions', sortable: false,}
+];
 
 // Methods
 const formatDate = (dateString) => {
@@ -129,34 +127,34 @@ const formatDate = (dateString) => {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  })
-}
+  });
+};
 
 const viewReservation = (item) => {
-  selectedReservation.value = {...item}
-  openManageReservation.value = true
-}
+  selectedReservation.value = {...item};
+  openManageReservation.value = true;
+};
 
 const confirmDelete = (item) => {
-  reservationToDelete.value = item
-  deleteDialog.value = true
-}
+  reservationToDelete.value = item;
+  deleteDialog.value = true;
+};
 
 const handleDeleteFromView = (reservation) => {
-  reservationToDelete.value = reservation
-  openManageReservation.value = false
-  deleteDialog.value = true
-}
+  reservationToDelete.value = reservation;
+  openManageReservation.value = false;
+  deleteDialog.value = true;
+};
 
 const handleDeleteConfirm = (reservation) => {
   // In real app, this would call an API
   const index = reservations.value.findIndex(r => r.id === reservation.id)
   if (index > -1) {
-    reservations.value.splice(index, 1)
+    reservations.value.splice(index, 1);
   }
-  deleteDialog.value = false
-  reservationToDelete.value = null
-}
+  deleteDialog.value = false;
+  reservationToDelete.value = null;
+};
 
 const handleSaveNote = ({reservation, note}) => {
   // Add note to selected reservation
