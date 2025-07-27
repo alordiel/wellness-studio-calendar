@@ -21,7 +21,7 @@ export const useInstructorStore = defineStore('instructors', {
             {
                 id: 3,
                 name: 'Sarah Rodriguez',
-                avatar: '/assets/avatars/sarah-rodriguez.jpg',
+                avatar: '',
                 biography: 'Former professional boxer Sarah brings her expertise to boxing classes for all levels, focusing on technique and fitness.',
                 link: '/instructors/sarah-rodriguez'
             },

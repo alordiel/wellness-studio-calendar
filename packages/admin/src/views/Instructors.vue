@@ -22,18 +22,20 @@
     >
       <template v-slot:item.name="{ item }">
         <div class="d-flex align-center">
-          <v-avatar size="40" class="mr-3">
+          <v-avatar v-if="item.avatar" size="40" class="mr-3">
             <v-img
-              v-if="item.avatar"
               :src="item.avatar"
               :alt="item.name"
             />
-            <v-icon
-              v-else
-              icon="mdi-account"
-            />
           </v-avatar>
-          <span class="font-weight-medium">{{ item.name }}</span>
+          <v-avatar
+              v-else
+              color="brown"
+              size="40px"
+            >
+              <span>{{ getInitials(item.name) }}</span>
+            </v-avatar>
+          <span class="font-weight-medium ml-3">{{ item.name }}</span>
         </div>
       </template>
 
@@ -172,6 +174,15 @@ const truncateLink = (link) => {
     return link.substring(0, 47) + '...'
   }
   return link
+}
+
+const getInitials = (name) => {
+  const names = name.split(' ');
+  let initials = name.charAt(0);
+  if (names.length > 1) {
+    initials += names[1].charAt(0)
+  }
+  return initials;
 }
 
 const openAddModal = () => {
