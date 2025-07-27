@@ -83,6 +83,11 @@ export const useReservationStore = defineStore('reservations', {
             // Example: await saveReservationToWordPress(reservation)
             return true
         },
+        async updateAdminNote(reservationId, note) {
+            const index = this.reservations.findIndex(reservation => reservation.id === reservationId)
+            this.reservations[index].admin_notes.push(note);
+        },
+
         async updateReservation(id, updatedReservation) {
             const index = this.reservations.findIndex(reservation => reservation.id === id)
             if (index >= 0) {

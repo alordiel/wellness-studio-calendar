@@ -115,7 +115,9 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
+import {useReservationStore} from '../../store/reservation.js';
+const reservationStore = useReservationStore();
 
 const props = defineProps({
   modelValue: {
@@ -126,59 +128,58 @@ const props = defineProps({
     type: Object,
     default: null
   }
-})
+});
 
-const emit = defineEmits(['update:modelValue', 'delete', 'saveNote', 'close'])
+const emit = defineEmits(['update:modelValue', 'delete', 'saveNote', 'close']);
 
-const localDialog = ref(false)
-const newAdminNote = ref('')
+const localDialog = ref(false);
+const newAdminNote = ref('');
 
 // Watch for changes to the prop and update local state
 watch(() => props.modelValue, (newVal) => {
-  localDialog.value = newVal
+  localDialog.value = newVal;
   if (!newVal) {
-    newAdminNote.value = ''
+    newAdminNote.value = '';
   }
-})
+});
 
 // Watch local dialog changes and emit to parent
 watch(localDialog, (newVal) => {
   if (newVal !== props.modelValue) {
-    emit('update:modelValue', newVal)
+    emit('update:modelValue', newVal);
   }
-})
+});
 
 const formatDate = (dateString) => {
-  if (!dateString) return 'N/A'
-  const date = new Date(dateString)
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
   return date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  })
+  });
 }
 
 const handleClose = () => {
-  localDialog.value = false
-  emit('close')
+  localDialog.value = false;
+  emit('close');
 }
 
 const handleDelete = () => {
-  emit('delete', props.reservation)
+  emit('delete', props.reservation);
 }
 
 const handleSaveNote = () => {
-  if (!newAdminNote.value.trim()) return
+  if (!newAdminNote.value.trim()) return;
 
   const note = {
     created_at: new Date().toISOString(),
     author: 'You',
     content: newAdminNote.value
-  }
-
-  emit('saveNote', { reservation: props.reservation, note })
-  newAdminNote.value = ''
+  };
+  reservationStore.updateAdminNote( props.reservation.id, note );
+  newAdminNote.value = '';
 }
 </script>

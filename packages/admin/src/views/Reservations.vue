@@ -62,7 +62,6 @@
         v-model="openManageReservation"
         :reservation="selectedReservation"
         @delete="handleDeleteFromView"
-        @saveNote="handleSaveNote"
         @close="closeViewModal"
     />
 
@@ -156,23 +155,6 @@ const handleDeleteConfirm = (reservation) => {
   reservationToDelete.value = null;
 };
 
-const handleSaveNote = ({reservation, note}) => {
-  // Add note to selected reservation
-  if (!reservation.adminNotes) {
-    reservation.adminNotes = []
-  }
-  reservation.adminNotes.push(note)
-
-  // Update the original reservation in the list
-  const index = reservations.value.findIndex(r => r.id === reservation.id)
-  if (index > -1) {
-    reservations.value[index] = {...reservation}
-  }
-
-  // Update selectedReservation to reflect the change
-  selectedReservation.value = {...reservation}
-}
-
 const handleAddSuccess = (newReservation) => {
   // Add the new reservation to the list (in real app, this would be handled by the store)
   const reservationForTable = {
@@ -203,7 +185,7 @@ const formattedReservations = computed(() => {
     const activity = activityStore.getActivityById(event.activity_id);
 
     return {
-      id: 1,
+      id:reservation.id,
       eventName: activity.name,
       dateTimeReservation: '2024-11-15T08:00:00',
       userName: reservation.user_name,
