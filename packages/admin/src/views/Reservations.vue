@@ -26,7 +26,7 @@
         <v-sheet border rounded>
           <v-data-table
               :headers="headers"
-              :items="reservations"
+              :items="formattedReservations"
               :sort-by="[{ key: 'eventName', order: 'asc' }]"
               class="elevation-1"
           >
@@ -82,11 +82,16 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import Calendar from "../components/reservations/Calendar.vue"
 import ViewReservationModal from "../components/reservations/ViewReservationModal.vue"
 import DeleteReservationModal from "../components/reservations/DeleteReservationModal.vue"
 import AddReservationModal from "../components/reservations/AddReservationModal.vue"
+import {useReservationStore} from '../store/reservation.js'
+import {useEventsStore} from "../store/event.js";
+import {useInstructorStore} from "../store/instructor.js";
+import {useActivityStore} from "../store/activity.js";
+import {storeToRefs} from "pinia";
 
 // Reactive data
 const activeTab = ref('reservations')
@@ -95,60 +100,11 @@ const deleteDialog = ref(false)
 const openNewReservation = ref(false)
 const selectedReservation = ref(null)
 const reservationToDelete = ref(null)
-
-// Mock data
-const reservations = ref([
-  {
-    id: 1,
-    eventName: 'Morning Yoga Class',
-    dateTimeReservation: '2024-11-15T08:00:00',
-    userName: 'John Doe',
-    userEmail: 'john.doe@example.com',
-    userPhone: '+1234567890',
-    userNotes: 'First time attending, excited! Please arrive 10 minutes early.',
-    dateCreation: '2024-11-10T14:30:00',
-    adminNotes: [
-      {
-        date: '2024-11-11T09:00:00',
-        adminName: 'Sarah Admin',
-        content: 'New member, offered intro package. Please arrive 10 minutes early.'
-      }
-    ]
-  },
-  {
-    id: 2,
-    eventName: 'Evening Meditation',
-    dateTimeReservation: '2024-11-16T18:00:00',
-    userName: 'Jane Smith',
-    userEmail: 'jane.smith@example.com',
-    userPhone: '+1987654321',
-    userNotes: 'Need a quiet corner if possible',
-    dateCreation: '2024-11-12T09:15:00',
-    adminNotes: []
-  },
-  {
-    id: 3,
-    eventName: 'Power Yoga Session',
-    dateTimeReservation: '2024-11-17T10:00:00',
-    userName: 'Mike Johnson',
-    userEmail: 'mike.j@example.com',
-    userPhone: '+1122334455',
-    userNotes: '',
-    dateCreation: '2024-11-13T16:45:00',
-    adminNotes: [
-      {
-        date: '2024-11-13T17:00:00',
-        adminName: 'Admin User',
-        content: 'Regular participant, advanced level'
-      },
-      {
-        date: '2024-11-14T09:00:00',
-        adminName: 'Another Admin',
-        content: 'Requested specific mat placement near window'
-      }
-    ]
-  }
-])
+const reservationStore = useReservationStore();
+const instructorStore = useInstructorStore()
+const activityStore = useActivityStore()
+const eventStore = useEventsStore()
+const {reservations} = storeToRefs(reservationStore);
 
 // Table headers
 const headers = [
@@ -223,7 +179,7 @@ const handleAddSuccess = (newReservation) => {
   // Add the new reservation to the list (in real app, this would be handled by the store)
   const reservationForTable = {
     id: newReservation.id,
-    eventName: 'Manual Reservation', // In real app, this would be from selected event
+    eventName: newReservation.event, // In real app, this would be from selected event
     dateTimeReservation: newReservation.dateTimeReservation,
     userName: newReservation.user_name,
     userEmail: newReservation.email,
@@ -242,6 +198,25 @@ const handleAddSuccess = (newReservation) => {
   reservations.value.push(reservationForTable)
   console.log('New reservation added:', newReservation)
 }
+
+const formattedReservations = computed(() => {
+  return reservations.value.map((reservation) => {
+    const event = eventStore.getEventByEventId(reservation.event);
+    const activity = activityStore.getActivityById(event.activity_id);
+
+    return {
+      id: 1,
+      eventName: activity.name,
+      dateTimeReservation: '2024-11-15T08:00:00',
+      userName: reservation.user_name,
+      userEmail: reservation.email,
+      userPhone: reservation.phone,
+      userNotes:reservation.user_notes || '',
+      dateCreation: reservation.created_at,
+      adminNotes: reservation.admin_notes ?reservation.admin_notes : [],
+    }
+  })
+})
 
 // Modal close handlers
 const closeViewModal = () => {

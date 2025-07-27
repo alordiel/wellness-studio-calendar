@@ -36,6 +36,8 @@
                   :item-props="itemProps"
                   :items="listOfEvents"
                   label="Select Event"
+                  v-model="formData.event"
+                  required
                 >
                   <template v-slot:item="{ props: itemProps, item }">
                     <v-list-item
@@ -122,6 +124,7 @@ const isSubmitting = ref(false)
 const listOfEvents = ref([]);
 
 const formData = reactive({
+  event: 0,
   user_name: '',
   email: '',
   phone: '',
@@ -201,11 +204,12 @@ function itemProps(item) {
 }
 
 const resetForm = () => {
-  formData.user_name = ''
-  formData.email = ''
-  formData.phone = ''
-  formData.payment_method = ''
-  formData.admin_notes = ''
+  formData.user_name = '';
+  formData.email = '';
+  formData.phone = '';
+  formData.payment_method = '';
+  formData.admin_notes = '';
+  formData.event = 0;
 
   // Clear errors
   Object.keys(errors).forEach(key => {
@@ -241,7 +245,7 @@ const handleSubmit = async () => {
     // Create new reservation object
     const newReservation = {
       id: newId,
-      event: null, // This would be set based on event selection in a real app
+      event: formData.event, // This would be set based on event selection in a real app
       user_name: formData.user_name,
       email: formData.email,
       phone: formData.phone,
