@@ -6,7 +6,7 @@ export const useReservationStore = defineStore('reservations', {
         reservations: [
             {
                 id: 1,
-                event: 1, // Morning Yoga
+                event_id: 1, // Morning Yoga
                 user_name: 'Alice Johnson',
                 email: 'alice@example.com',
                 phone: '555-123-4567',
@@ -18,7 +18,7 @@ export const useReservationStore = defineStore('reservations', {
             },
             {
                 id: 2,
-                event: 2, // Boxing Class
+                event_id: 2, // Boxing Class
                 user_name: 'Bob Williams',
                 email: 'bob@example.com',
                 phone: '555-234-5678',
@@ -30,7 +30,7 @@ export const useReservationStore = defineStore('reservations', {
             },
             {
                 id: 3,
-                event: 3, // Pilates
+                event_id: 3, // Pilates
                 user_name: 'Carol Martinez',
                 email: 'carol@example.com',
                 phone: '555-345-6789',
@@ -42,7 +42,7 @@ export const useReservationStore = defineStore('reservations', {
             },
             {
                 id: 4,
-                event: 4, // Zumba
+                event_id: 4, // Zumba
                 user_name: 'David Lee',
                 email: 'david@example.com',
                 phone: '555-456-7890',
@@ -66,7 +66,7 @@ export const useReservationStore = defineStore('reservations', {
         },
         getReservationsByEvent: (state) => {
             return (eventId) => {
-                return state.reservations.filter(reservation => reservation.event === eventId)
+                return state.reservations.filter(reservation => reservation.event_id === eventId)
             }
         },
         getActiveReservations: (state) => {

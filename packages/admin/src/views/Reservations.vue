@@ -177,7 +177,7 @@ const handleAddSuccess = (newReservation) => {
   // Add the new reservation to the list (in real app, this would be handled by the store)
   const reservationForTable = {
     id: newReservation.id,
-    eventName: newReservation.event, // In real app, this would be from selected event
+    eventName: newReservation.event_id, // In real app, this would be from selected event
     dateTimeReservation: newReservation.dateTimeReservation,
     userName: newReservation.user_name,
     userEmail: newReservation.email,
@@ -199,7 +199,7 @@ const handleAddSuccess = (newReservation) => {
 
 const formattedReservations = computed(() => {
   return reservations.value.map((reservation) => {
-    const event = eventStore.getEventByEventId(reservation.event);
+    const event = eventStore.getEventByEventId(reservation.event_id);
     const activity = activityStore.getActivityById(event.activity_id);
 
     return {
