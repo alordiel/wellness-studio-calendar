@@ -92,6 +92,14 @@
                 placeholder="Enter your note here..."
               ></v-textarea>
             </v-col>
+            <v-col cols="12">
+              <v-btn
+                  type="outline"
+                  :disabled="newAdminNote === ''"
+                  color="primary"
+                  @click="handleSaveNote"
+              >Save Note</v-btn>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -101,7 +109,6 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="grey" @click="handleClose">Close</v-btn>
-        <v-btn color="primary" @click="handleSaveNote">Save Note</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -144,7 +151,7 @@ watch(localDialog, (newVal) => {
 const formatDate = (dateString) => {
   if (!dateString) return 'N/A'
   const date = new Date(dateString)
-  return date.toLocaleString('en-US', {
+  return date.toLocaleString('en-GB', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -166,8 +173,8 @@ const handleSaveNote = () => {
   if (!newAdminNote.value.trim()) return
 
   const note = {
-    date: new Date().toISOString(),
-    adminName: 'Current Admin', // In real app, get from user session
+    created_at: new Date().toISOString(),
+    author: 'You',
     content: newAdminNote.value
   }
 
