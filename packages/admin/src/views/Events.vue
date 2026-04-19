@@ -63,15 +63,7 @@
       <!-- Time Columns with Icons -->
       <template v-slot:item.start_time="{ item }">
         <div class="d-flex align-center">
-          <v-icon size="small" class="mr-1">mdi-play</v-icon>
-          {{ item.start_time }}
-        </div>
-      </template>
-
-      <template v-slot:item.end_time="{ item }">
-        <div class="d-flex align-center">
-          <v-icon size="small" class="mr-1">mdi-stop</v-icon>
-          {{ item.end_time }}
+          {{ item.start_time }} - {{ item.end_time }}
         </div>
       </template>
 
@@ -260,13 +252,6 @@ const headers = ref([
     align: 'center',
     sortable: false,
     key: 'start_time',
-    width: '120px'
-  },
-  {
-    title: 'End Time',
-    align: 'center',
-    sortable: false,
-    key: 'end_time',
     width: '120px'
   },
   {

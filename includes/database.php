@@ -47,6 +47,7 @@ function wsc_create_database_tables() {
         `ID` int(8) AUTO_INCREMENT NOT NULL UNIQUE,
         `activity_id` int(4) NOT NULL,
         `instructor_id` int(4) NOT NULL,
+        `recurrency_type` varchar(25) NOT NULL,
         `week_day` varchar(20) NOT NULL,
         `start_time` time NOT NULL,
         `end_time` time NOT NULL,
