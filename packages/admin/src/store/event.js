@@ -52,6 +52,14 @@ export const useEventsStore = defineStore('events', {
             return [...state.events].sort((a, b) =>  a.activity_id.localeCompare(b.activity_id));
         },
 
+        getRecurringEvents(state) {
+            return state.events.filter(e => e.recurrency_type === 'recurring' || !e.recurrency_type)
+        },
+
+        getSingleEvents(state) {
+            return state.events.filter(e => e.recurrency_type === 'single')
+        },
+
         getEventByEventId(state) {
             return (eventId) => {
                 return state.events.find((event) => event.id === eventId);

@@ -22,6 +22,16 @@ const routes = [
     component: () => import('../views/Events.vue')
   },
   {
+    path: '/events/recurring',
+    name: 'RecurringEvents',
+    component: () => import('../views/Recurring-events.vue')
+  },
+  {
+    path: '/events/single',
+    name: 'SingleEvents',
+    component: () => import('../views/Single-events.vue')
+  },
+  {
     path: '/instructors',
     name: 'Instructors',
     component: () => import('../views/Instructors.vue')
