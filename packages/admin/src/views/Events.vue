@@ -48,10 +48,6 @@
         </div>
       </template>
 
-      <!-- Location Column with HTML Content -->
-      <template v-slot:item.location="{ item }">
-        <div v-html="item.location"></div>
-      </template>
 
       <!-- Week Day Column with Chip -->
       <template v-slot:item.week_day="{ item }">
@@ -221,7 +217,6 @@ import ViewTitle from "../components/View-title.vue";
 const eventsStore = useEventsStore()
 const { events } = storeToRefs(eventsStore)
 const instructorStore = useInstructorStore()
-const locationStore = useLocationStore()
 const activityStore = useActivityStore()
 
 // Reactive data
@@ -252,13 +247,6 @@ const headers = ref([
     sortable: true,
     key: 'instructor',
     width: '150px'
-  },
-  {
-    title: 'Location',
-    align: 'start',
-    sortable: false,
-    key: 'location',
-    width: '200px'
   },
   {
     title: 'Week Day',
@@ -341,7 +329,7 @@ const closeModal = () => {
 const formattedEvents = computed(() => {
   return events.value.map((event) => {
     const activity = activityStore.getActivityById(event.activity_id)
-    const location = locationStore.getLocationById(event.location_id)
+
     const user = instructorStore.getInstructorById(event.instructor_id)
 
     return {
@@ -351,8 +339,6 @@ const formattedEvents = computed(() => {
       color: activity.color,
       instructor: user.name,
       instructor_id: event.instructor_id,
-      location: location.address + ' <br> <strong>' + location.hall + '</strong>',
-      location_id: event.location_id,
       week_day: event.week_day,
       start_time: event.start_time,
       end_time: event.end_time,

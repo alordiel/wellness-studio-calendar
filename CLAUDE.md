@@ -44,7 +44,6 @@ npm run preview # Preview production build
 - **WSC_Event**: Main event management class with CRUD operations
 - **WSC_Activity**: Activity/practice class management
 - **WSC_Instructor**: Instructor profile management
-- **WSC_Location**: Location and room management
 - **WSC_Reservation**: Booking system management
 
 ### Frontend Architecture

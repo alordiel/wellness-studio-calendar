@@ -33,18 +33,6 @@
               class="mb-4"
           ></v-select>
 
-          <!-- Location Selection -->
-          <v-select
-              v-model="formData.location_id"
-              :items="locationOptions"
-              item-title="displayName"
-              item-value="id"
-              label="Location"
-              variant="outlined"
-              density="comfortable"
-              :error-messages="errors.location_id"
-              class="mb-4"
-          ></v-select>
 
           <!-- Week Day Selection (Radio Buttons) -->
           <div class="mb-4">
@@ -136,10 +124,9 @@ const emit = defineEmits(['close'])
 const props = defineProps(['eventId', 'showModal'])
 
 // Stores
-const eventsStore = useEventsStore()
-const activityStore = useActivityStore()
-const instructorStore = useInstructorStore()
-const locationStore = useLocationStore()
+const eventsStore = useEventsStore();
+const activityStore = useActivityStore();
+const instructorStore = useInstructorStore();
 
 // Store refs
 const {events} = storeToRefs(eventsStore)
@@ -150,7 +137,6 @@ const modalState = ref(false)
 const formData = reactive({
   activity_id: null,
   instructor_id: null,
-  location_id: null,
   week_day: '',
   start_time: null,
   end_time: null,
@@ -160,7 +146,6 @@ const formData = reactive({
 const errors = reactive({
   activity_id: '',
   instructor_id: '',
-  location_id: '',
   week_day: '',
   start_time: '',
   end_time: '',
@@ -184,12 +169,6 @@ const modalTitle = computed(() => isEditing.value ? 'Edit Event' : 'Add New Even
 // Options for dropdowns
 const activityOptions = computed(() => activityStore.getAllActivities)
 const instructorOptions = computed(() => instructorStore.getAllInstructors)
-const locationOptions = computed(() => {
-  return locationStore.getAllLocations.map(location => ({
-    ...location,
-    displayName: `${location.hall} - ${location.address}`
-  }))
-})
 
 // Watchers
 watch(() => props.showModal, (newVal) => {
@@ -206,7 +185,6 @@ const populateFormData = () => {
     if (event) {
       formData.activity_id = event.activity_id
       formData.instructor_id = event.instructor_id
-      formData.location_id = event.location_id
       formData.week_day = event.week_day
       formData.start_time = event.start_time
       formData.end_time = event.end_time
@@ -224,7 +202,6 @@ const closeModal = () => {
 const resetForm = () => {
   formData.activity_id = null
   formData.instructor_id = null
-  formData.location_id = null
   formData.week_day = ''
   formData.start_time = null
   formData.end_time = null
@@ -247,12 +224,6 @@ const validateForm = () => {
   // Validate instructor
   if (!formData.instructor_id) {
     errors.instructor_id = 'Instructor is required'
-    isValid = false
-  }
-
-  // Validate location
-  if (!formData.location_id) {
-    errors.location_id = 'Location is required'
     isValid = false
   }
 
@@ -292,7 +263,6 @@ const handleSubmit = () => {
   const eventData = {
     activity_id: formData.activity_id,
     instructor_id: formData.instructor_id,
-    location_id: formData.location_id,
     week_day: formData.week_day,
     start_time: formData.start_time,
     end_time: formData.end_time,
