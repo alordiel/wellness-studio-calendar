@@ -21,7 +21,6 @@ function wsc_register_roles_and_caps() {
     $caps = array(
         'manage_wsc_event',
         'manage_wsc_instructor',
-        'manage_wsc_locations',
         'manage_wsc_practice_classes',
         'manage_wsc_reservations'
     );
@@ -43,7 +42,6 @@ function wsc_register_roles_and_caps() {
             'read' => true,
             'manage_wsc_event' => true,
             'manage_wsc_instructor' => true,
-            'manage_wsc_locations' => true,
             'manage_wsc_practice_classes' => true,
             'manage_wsc_reservations' => true,
         );
@@ -64,7 +62,6 @@ function wsc_remove_roles_and_caps() {
     $caps = array(
         'manage_wsc_event',
         'manage_wsc_instructor',
-        'manage_wsc_locations',
         'manage_wsc_practice_classes',
         'manage_wsc_reservations'
     );

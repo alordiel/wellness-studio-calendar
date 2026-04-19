@@ -29,6 +29,5 @@ global $wpdb;
 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_exceptions");
 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_reservations");
 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_events");
-$wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_locations");
 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_instructors");
 $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}wsc_practice_class");

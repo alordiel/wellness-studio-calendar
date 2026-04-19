@@ -36,7 +36,6 @@ npm run preview # Preview production build
 ### Database Tables
 - `wsc_activity` - Practice classes/activities
 - `wsc_instructors` - Instructor profiles
-- `wsc_locations` - Studio locations and rooms
 - `wsc_events` - Recurring weekly events
 - `wsc_reservations` - User bookings
 - `wsc_exceptions` - Event schedule exceptions

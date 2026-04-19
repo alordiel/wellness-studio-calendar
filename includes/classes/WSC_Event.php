@@ -41,12 +41,7 @@ class WSC_Event {
      */
     private string $instructor_table;
 
-    /**
-     * Location table name
-     *
-     * @var string
-     */
-    private string $location_table;
+
 
     /**
      * Initialize the class
@@ -56,7 +51,6 @@ class WSC_Event {
         $this->table_name = $wpdb->prefix . 'wsc_events';
         $this->practice_class_table = $wpdb->prefix . 'wsc_practice_class';
         $this->instructor_table = $wpdb->prefix . 'wsc_instructors';
-        $this->location_table = $wpdb->prefix . 'wsc_locations';
     }
 
 	/**
@@ -73,7 +67,6 @@ class WSC_Event {
         // Ensure required fields are present
         $practice_class = isset( $data['practice_class'] ) ? absint( $data['practice_class'] ) : 0;
         $instructor = isset( $data['instructor'] ) ? absint( $data['instructor'] ) : 0;
-        $location = isset( $data['location'] ) ? absint( $data['location'] ) : 0;
         $room = isset( $data['room'] ) ? absint( $data['room'] ) : 0;
         $color = isset( $data['color'] ) ? sanitize_hex_color( $data['color'] ) : '';
         $week_day = isset( $data['week_day'] ) ? sanitize_text_field( $data['week_day'] ) : '';
@@ -81,7 +74,7 @@ class WSC_Event {
         $end_time = isset( $data['end_time'] ) ? sanitize_text_field( $data['end_time'] ) : '';
 		$places = isset( $data['places'] ) ? absint( $data['places'] ) : 0;
         // Validate required fields
-        if ( !$practice_class || !$instructor || !$location || !$room || empty($week_day) || empty($start_time) || empty($end_time) ) {
+        if ( !$practice_class || !$instructor || !$room || empty($week_day) || empty($start_time) || empty($end_time) ) {
 			throw new Exception(__('Missing some fields data', 'wellness-studio-calendar'));
         }
 
@@ -100,7 +93,6 @@ class WSC_Event {
         $event_data = array(
             'practice_class' => $practice_class,
             'instructor'     => $instructor,
-            'location'       => $location,
             'room'           => $room,
             'color'          => $color,
             'week_day'       => $week_day,
@@ -113,7 +105,7 @@ class WSC_Event {
         $result = $wpdb->insert(
             $this->table_name,
             $event_data,
-            array( '%d', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%d' )
+            array( '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%d' )
         );
 
         if ( $result ) {
@@ -145,13 +137,10 @@ class WSC_Event {
             "SELECT event.name, event.start_time, event.end_time, event.week_day, event.places,
                 practice.name AS practice_class_name, 
                 instructor.name AS instructor_name, 
-                location.name AS location_name,
             	room.name AS room_name,
             FROM {$this->table_name} event
             LEFT JOIN {$this->practice_class_table} practice ON event.practice_class = practice.ID
             LEFT JOIN {$this->instructor_table} instructor ON event.instructor = instructor.ID
-            LEFT JOIN {$this->location_table} location ON event.location = location.ID
-            LEFT JOIN {$this->location_table} room ON event.room = room.ID
             WHERE event.ID = %d",
             $event_id
         );
@@ -192,11 +181,6 @@ class WSC_Event {
 
         if ( isset( $data['instructor'] ) ) {
             $update_data['instructor'] = absint( $data['instructor'] );
-            $formats[] = '%d';
-        }
-
-        if ( isset( $data['location'] ) ) {
-            $update_data['location'] = absint( $data['location'] );
             $formats[] = '%d';
         }
 
@@ -304,7 +288,6 @@ class WSC_Event {
             'offset'        => 0,
             'practice_class'=> 0,
             'instructor'    => 0,
-            'location'      => 0,
             'week_day'      => '',
         );
 
@@ -314,11 +297,9 @@ class WSC_Event {
         $query = "SELECT e.*, 
                 pc.name AS practice_class_name, 
                 i.name AS instructor_name, 
-                l.name AS location_name
             FROM {$this->table_name} e
             LEFT JOIN {$this->practice_class_table} pc ON e.practice_class = pc.ID
-            LEFT JOIN {$this->instructor_table} i ON e.instructor = i.ID
-            LEFT JOIN {$this->location_table} l ON e.location = l.ID";
+            LEFT JOIN {$this->instructor_table} i ON e.instructor = i.ID";
 
         // Where clauses
         $where = [];
@@ -334,10 +315,6 @@ class WSC_Event {
             $prepare_args[] = $args['instructor'];
         }
 
-        if ( $args['location'] > 0 ) {
-            $where[] = 'e.location = %d';
-            $prepare_args[] = $args['location'];
-        }
 
         if ( !empty($args['week_day']) ) {
             $where[] = 'e.week_day = %s';
@@ -350,7 +327,7 @@ class WSC_Event {
         }
 
         // Order clause
-        $valid_order_columns = array('ID', 'practice_class', 'instructor', 'location', 'room', 'week_day', 'start_time', 'end_time');
+        $valid_order_columns = array('ID', 'practice_class', 'instructor', 'room', 'week_day', 'start_time', 'end_time');
         $orderby = in_array($args['orderby'], $valid_order_columns) ? $args['orderby'] : 'week_day';
         $order = strtoupper($args['order']) === 'DESC' ? 'DESC' : 'ASC';
 
@@ -427,16 +404,4 @@ class WSC_Event {
     public function get_by_practice_class( int $practice_class_id ): array {
         return $this->get_all( array( 'practice_class' => absint( $practice_class_id ) ) );
     }
-
-    /**
-     * Get events by location
-     *
-     * @param int $location_id Location ID
-     *
-     * @return array Array of events for the specified location
-     */
-    public function get_by_location( int $location_id ): array {
-        return $this->get_all( array( 'location' => absint( $location_id ) ) );
-    }
-
 }
