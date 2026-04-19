@@ -94,13 +94,6 @@ const dashboardBlocks: DashboardBlock[] = [
     description: 'Manage your team of instructors and their availability.'
   },
   {
-    name: 'locations',
-    title: 'Locations',
-    route: '/locations',
-    ariaLabel: 'Navigate to Locations page',
-    description: 'Set up and manage multiple venues and locations.'
-  },
-  {
     name: 'settings',
     title: 'Settings',
     route: '/settings',

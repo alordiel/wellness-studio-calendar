@@ -107,6 +107,13 @@
 
             <v-list-item class="px-0">
               <template v-slot:prepend>
+                <v-icon color="primary">mdi-map-marker</v-icon>
+              </template>
+              <v-list-item-title>Support for multiple locations</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item class="px-0">
+              <template v-slot:prepend>
                 <v-icon color="primary">mdi-calendar-clock</v-icon>
               </template>
               <v-list-item-title>
@@ -238,9 +245,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { ref, reactive } from 'vue';
+import { QuillEditor } from '@vueup/vue-quill';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import ViewTitle from "../components/View-title.vue";
 
 // Types
@@ -311,7 +318,7 @@ const quillOptions = {
 }
 
 // Methods
-const saveSettings = async (): Promise<void> => {
+const saveSettings = async () => {
   saving.value = true
 
   try {
