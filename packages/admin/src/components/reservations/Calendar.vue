@@ -339,6 +339,17 @@ const events = ref([
     booked: 5,
     available: 12,
     participants: []
+  },
+    {
+    id: 5,
+    date: '2026-04-19',
+    startTime: '19:30',
+    eventName: 'Yoga Stretch',
+    instructor: 'Rea Risto',
+    location: 'Studio A',
+    booked: 5,
+    available: 12,
+    participants: []
   }
 ])
 

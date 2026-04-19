@@ -8,7 +8,7 @@ export const useEventsStore = defineStore('events', {
                 id: 1,
                 activity_id: 1,
                 instructor_id: 1,
-                recurrency_type: 'recurring',
+                is_recurring: 1,
                 week_day: 'Monday',
                 start_time: '07:00',
                 end_time: '08:30',
@@ -18,7 +18,7 @@ export const useEventsStore = defineStore('events', {
                 id: 2,
                 activity_id: 1,
                 instructor_id: 3,
-                recurrency_type: 'recurring',
+                is_recurring: 1,
                 week_day: 'Tuesday',
                 start_time: '18:00',
                 end_time: '19:30',
@@ -28,8 +28,8 @@ export const useEventsStore = defineStore('events', {
                 id: 3,
                 activity_id: 2,
                 instructor_id: 2,
-                date: '2026-05-01',
-                recurrency_type: 'single',
+                date: '2026-04-19',
+                is_recurring: 0,
                 start_time: '12:00',
                 end_time: '13:00',
                 places: 12
@@ -38,7 +38,7 @@ export const useEventsStore = defineStore('events', {
                 id: 4,
                 activity_id: 4,
                 instructor_id: 4,
-                recurrency_type: 'recurring',
+                is_recurring: 1,
                 week_day: 'Friday',
                 start_time: '17:30',
                 end_time: '18:30',
@@ -53,11 +53,11 @@ export const useEventsStore = defineStore('events', {
         },
 
         getRecurringEvents(state) {
-            return state.events.filter(e => e.recurrency_type === 'recurring' || !e.recurrency_type)
+            return state.events.filter(e => e.is_recurring === 1 || !e.is_recurring)
         },
 
         getSingleEvents(state) {
-            return state.events.filter(e => e.recurrency_type === 'single')
+            return state.events.filter(e => e.is_recurring === 0)
         },
 
         getEventByEventId(state) {

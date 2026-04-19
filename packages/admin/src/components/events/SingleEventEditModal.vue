@@ -212,7 +212,7 @@ const handleSubmit = () => {
     activity_id: formData.activity_id,
     instructor_id: formData.instructor_id,
     date: formData.date,
-    recurrency_type: 'single',
+    is_recurring: 0,
     start_time: formData.start_time,
     end_time: formData.end_time,
     places: formData.places,
