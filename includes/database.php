@@ -42,21 +42,11 @@ function wsc_create_database_tables() {
         PRIMARY KEY (`ID`)
     ) $charset_collate;";
 
-    // Locations table
-    $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_locations` (
-        `ID` int(2) AUTO_INCREMENT NOT NULL UNIQUE,
-        `address` varchar(255) NOT NULL,
-        `hall_name` varchar(255) NOT NULL,
-        `max_participants` TINYINT(1) NOT NULL,
-        PRIMARY KEY (`ID`)
-    ) $charset_collate;";
-
     // Events table
     $sql[] = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wsc_events` (
         `ID` int(8) AUTO_INCREMENT NOT NULL UNIQUE,
         `activity_id` int(4) NOT NULL,
         `instructor_id` int(4) NOT NULL,
-        `location_id` int(2) NOT NULL,
         `week_day` varchar(20) NOT NULL,
         `start_time` time NOT NULL,
         `end_time` time NOT NULL,
@@ -109,10 +99,6 @@ function wsc_create_database_tables() {
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
         ADD CONSTRAINT `event_fk2` FOREIGN KEY (`instructor_id`) 
         REFERENCES `{$wpdb->prefix}wsc_instructors`(`ID`);";
-
-    $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_events` 
-        ADD CONSTRAINT `event_fk3` FOREIGN KEY (`location_id`) 
-        REFERENCES `{$wpdb->prefix}wsc_locations`(`ID`);";
 
     $sql[] = "ALTER TABLE `{$wpdb->prefix}wsc_reservations` 
         ADD CONSTRAINT `reservations_fk1` FOREIGN KEY (`event_id`) 

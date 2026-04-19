@@ -131,7 +131,6 @@ import {VTimePicker} from 'vuetify/labs/VTimePicker'
 import {useEventsStore} from "../../store/event.js"
 import {useActivityStore} from "../../store/activity.js"
 import {useInstructorStore} from "../../store/instructor.js"
-import {useLocationStore} from "../../store/location.js"
 
 const emit = defineEmits(['close'])
 const props = defineProps(['eventId', 'showModal'])

@@ -214,7 +214,6 @@ import ExceptionsModal from "../components/events/ExceptionsModal.vue"
 import EditModal from "../components/events/EditModal.vue"
 import { useEventsStore } from '../store/event.js'
 import { useInstructorStore } from "../store/instructor.js"
-import { useLocationStore } from "../store/location.js"
 import { useActivityStore } from "../store/activity.js"
 import ViewTitle from "../components/View-title.vue";
 

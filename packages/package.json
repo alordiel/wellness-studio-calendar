@@ -11,16 +11,16 @@
     "dev:frontend": "npm run dev -w ./front-end",
     "build:admin": "npm run build -w ./admin",
     "build:frontend": "npm run build -w ./front-end",
-    "build": "npm run build:admin && npm run build:frontend"
+    "build:all": "npm run build:admin && npm run build:frontend"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "pinia": "^3.0.2",
-    "vue": "^3.5.14"
+    "@vitejs/plugin-vue": "^6.0.6",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.32"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "vite": "^6.3.5"
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "vite": "^8.0.8"
   }
 }
