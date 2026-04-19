@@ -23,6 +23,7 @@ require_once WSC_PLUGIN_DIR . 'includes/admin/admin-page.php';
 require_once WSC_PLUGIN_DIR . 'includes/front-end/template-functions.php';
 require_once WSC_PLUGIN_DIR . 'includes/database.php';
 require_once WSC_PLUGIN_DIR . 'includes/enqueue-scripts.php';
+require_once WSC_PLUGIN_DIR . 'includes/API/class-wsc-api-loader.php';
 
 // Register activation hook
 register_activation_hook(__FILE__, 'wsc_activate_plugin');
